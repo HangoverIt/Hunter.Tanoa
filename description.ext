@@ -1,0 +1,89 @@
+respawn = 3;
+respawndelay = 5;
+disabledAI = true;
+
+enableDebugConsole = 1;
+allowFunctionsLog = 0;
+
+OverviewPicture = "hunter.jpg";
+onLoadMission = "Hunter 0.1";
+author = "Aidan Holmes";
+onLoadName = "Hunter 0.1";
+
+joinUnassigned = 0;
+
+class Header
+{
+	gameType = CTI;
+	minPlayers = 1;
+	maxPlayers = 41;
+};
+
+class CfgRespawnInventory 
+{
+  class None
+  {
+    displayName = "Default";
+	weapons[] = {} ;
+	magazines[] = {} ;
+	items[] = {} ;
+	linkedItems[] = {};
+	uniformClass = "U_B_CombatUniform_mcam_tshirt";
+	backpack = "" ;
+  };
+};
+
+class CfgDebriefing
+{
+	class End1
+	{
+		title =	"Failed!";
+		subtitle = "";
+		description = "Fail";
+		pictureBackground = "";
+	};
+};
+#include "\A3\ui_f\hpp\defineCommonGrids.inc"
+#include "\A3\ui_f\hpp\defineCommonColors.inc"
+class RscPicture ;
+
+class RscTitles
+{
+  class hunter_rsc
+  {
+    name = "hunter_rsc";
+    onLoad = "uiNamespace setVariable ['GUI', _this select 0];";
+    duration = 999999;
+    idd = 8000;
+    movingEnable = true;
+    controls[]= {TreeCoverRsc,BuildingCoverRsc} ;
+    class TreeCoverRsc: RscPicture {
+      idc = 1200;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.5;
+      text = "a3\modules_f\data\hideterrainobjects\icon32_ca.paa";
+      x = 1.55;
+      y = 0.54;
+      w = 0.1;
+      h = 0.1;
+    };
+    class BuildingCoverRsc: RscPicture {
+      idc = 1201;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.5;
+      text = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\spacegarage_ca.paa";
+      x = 1.55;
+      y = 0.54;
+      w = 0.1;
+      h = 0.1;
+    };
+  };
+};

@@ -1,0 +1,25 @@
+// Recommend using virtual reality map to create all objects. 
+// Stick playable soldier in middle and run script is an easy solution, but remember to remove the soldier otherwise it will also be created
+// The list of structures are copied to the clipboard and can be added to a file to include as a parameter for create_structure.
+
+// Copy and paste the contents of this file into the debug editor to save the objects
+
+creator_define_structure = {
+  params["_pos"] ;
+  _br = toString [13,10];
+  private _clipboard = "[" + _br;
+  private _first = true ;
+  {
+    if (!_first) then {
+      _clipboard = _clipboard + "," ;
+    };
+    _clipboard = _clipboard + format["[""%1"",%2,%3]", typeOf _x, getPosATL _x, getDir _x] + _br ;
+    _first = false ;
+  }forEach nearestObjects[_pos, ["All"], 2000, true] ;
+  _clipboard = _clipboard + "]" ;
+  copyToClipboard _clipboard;
+};
+
+[position player] call creator_define_structure ;
+
+
