@@ -1,0 +1,51 @@
+onMapSingleClick {
+  if (isNil "TmpMarkers") then {
+    TmpMarkers = [] ;
+  }else{
+    {
+      deleteMarker _x ;
+    }forEach TmpMarkers ;
+  }; 
+  _clicked_location = [] ;
+  {
+    _l_type = (_x select 0) ;
+    _l_name = (_x select 1) ;
+    _l_pos = (_x select 2) ;
+    _l_size = (_x select 3) ;
+    _max_size = (_l_size select 0) max (_l_size select 1) ;
+    if (_l_pos distance2D _pos <= _max_size) exitWith {
+      _clicked_location = _x ;
+    };
+  }forEach HunterLocations ;
+  
+  _found = false ;
+  if (count _clicked_location > 0) then {
+    // Search for location in network
+    {
+      _network = _x ;
+      {
+        if (_x isEqualTo _clicked_location) exitWith {
+          // Found network for location
+          _found = true ;
+        }; 
+      }forEach _network ;
+      if (_found) exitWith {
+        {
+          _l_type = (_x select 0) ;
+          _l_name = (_x select 1) ;
+          _l_pos = (_x select 2) ;
+          _l_size = (_x select 3) ;
+          _max_size = (_l_size select 0) max (_l_size select 1) ;
+          _mkr = createMarkerLocal ["mkrNetwork" + _l_name, _l_pos] ;
+          _mkr setMarkerShapeLocal "ELLIPSE" ;
+          _mkr setMarkerBrushLocal "Solid" ;
+          _mkr setMarkerColorLocal "ColorGreen" ;
+          _mkr setMarkerSize [_max_size, _max_size] ;
+          TmpMarkers pushBack _mkr;
+        }forEach _network ;
+      };
+    }forEach HunterNetwork ;
+  };
+
+  true ;
+};

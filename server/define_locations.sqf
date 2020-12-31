@@ -36,15 +36,14 @@ _prelen = count HUNTER_SPECIAL_MARKER_PREFIX;
 	  _special_location_name = _x select [_prelen, _mkrlen - _prelen] ;
 	  _special_file = _special_location_name + ".sqf" ;
 	  _size = [markerPos _x, HUNTER_PREDEFINED_DIR + "\" + _special_file, markerDir _x, false] call compile preprocessFileLineNumbers "utility\create_structure.sqf" ;
-	  diag_log format ["size of bounding area is %1", _size] ;
 	  _size = [(_size select 0) + 50, (_size select 1) + 50] ; // expand size slightly as size is exact rectangle of objects created
 	  _max_size = (_size select 0) max (_size select 1) ; // define max bounds for circle
 	  
 	  {
 		_x hideObjectGlobal true ;
 		deleteVehicle _x ;
-		//diag_log format["deleting terrain object %1 within radius %2", _x, (_max_size /2)];
-	  } forEach (nearestTerrainObjects [(markerPos _x) ,[], _max_size / 2]) ;
+		//diag_log format["deleting terrain object %1 within radius %2", _x, _max_size];
+	  } forEach (nearestTerrainObjects [(markerPos _x) ,[], _max_size]) ;
 	  
 	  [markerPos _x, HUNTER_PREDEFINED_DIR + "\" + _special_file, markerDir _x] call compile preprocessFileLineNumbers "utility\create_structure.sqf" ;
 
@@ -53,6 +52,7 @@ _prelen = count HUNTER_SPECIAL_MARKER_PREFIX;
       
       // add to locations
       HunterLocations pushBack [_special_location_name, _special_location_name, markerPos _x, _size, [], 100, _listvehicles, [], [], false, dateToNumber date] ;
+      diag_log format ["Creating special location %1, size of bounding area is %2", _special_location_name, _size] ;
     };
 	  deleteMarker _x ; 
 	}
@@ -67,7 +67,6 @@ if (_first) then {
   _houses = [] ;
   if (({(_x select 0) == HUNTER_CUSTOM_LOCATION} count HunterLocations) == 0) then {
     _map_houses = nearestObjects [[worldSize / 2, worldSize / 2], ["house"], _hyp / 2];
-    diag_log format ["Defining custom locations from %1 houses in world", count _map_houses] ;
     _clipboard = "" ;
     _br = toString [13,10];
     {
@@ -165,3 +164,22 @@ if (!_editor) then {
 };
 // broadcast locations to clients
 publicVariable "HunterLocations" ;
+
+// Load the road connection information
+private _networks = [] call compile preprocessFileLineNumbers "config\roads.sqf" ;
+HunterNetwork = [] ;
+{
+  _places = _x ;
+  _idx = HunterNetwork pushBack [] ;
+  _newplaces = (HunterNetwork select _idx) ;
+  {
+    // Find location and replace with location reference
+    _place = _x ;
+    {
+      // Compare location names (convert roads name from array to unicode string)
+      if ((_x select 1) isEqualTo (toString(_place select 0))) exitWith {
+        _newplaces pushBack _x ;
+      } ;
+    }forEach HunterLocations ;
+  }forEach _places ;
+}forEach _networks ;

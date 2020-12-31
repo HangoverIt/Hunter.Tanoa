@@ -24,9 +24,10 @@ h_getSectorFromPosition = compile preprocessFileLineNumbers "functions\h_getSect
 h_max_connected_road = compile preprocessFileLineNumbers "functions\h_max_connected_road.sqf" ;
 h_roadCallback = compileFinal preprocessFileLineNumbers "functions\h_roadCallback.sqf" ;
 
-[] call compileFinal preprocessFileLineNumbers "config\parameters.sqf" ;
+// Does not load any saved game
 
+[] call compile preprocessFileLineNumbers "config\parameters.sqf" ;
 [] call compile preprocessFileLineNumbers "server\define_sectors.sqf";
 [true] call compile preprocessFileLineNumbers "server\define_locations.sqf";
-[true] call compile preprocessFileLineNumbers "server\sector_manager.sqf";
-[true] call compile preprocessFileLineNumbers "server\location_manager.sqf";
+[true] call compile preprocessFileLineNumbers "server\sector_manager.sqf"; // show sectors on map
+[true] call compile preprocessFileLineNumbers "server\location_manager.sqf"; // show markers on map

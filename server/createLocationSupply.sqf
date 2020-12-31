@@ -40,6 +40,7 @@ if (_overWater) then {
 
 
 _v = createVehicle [_vehclass, _trypos, [], 0, "NONE"];
+_v setPosATL _trypos ;
 [_v] spawn spawn_protection ;
 _v addEventHandler["GetIn", {_this call event_getin}] ;
 _v call h_setManagedVehicle ;

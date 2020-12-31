@@ -49,6 +49,7 @@ while {_remaining_to_spawn > 0} do {
     _spawnpos = [_l_pos, 0, _max_loc_radius, 0, 0] call BIS_fnc_findSafePos;
     diag_log format ["%1: spawning vehicle %2 at %3 for threat %4", time, _vehclass, _spawnpos, _threat] ;
     _veh = createVehicle [_vehclass, _spawnpos, [], 0, "NONE"] ;
+    _veh setPosATL _spawnpos ;
     [_veh] spawn spawn_protection ;
     _veh addEventHandler["GetIn", {_this call event_getin}] ;
     _veh setVariable["Location", _l] ;
