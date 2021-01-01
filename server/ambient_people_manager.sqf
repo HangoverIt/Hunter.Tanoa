@@ -14,7 +14,7 @@ while {true} do {
     private _player = _players select (floor random count _players);
     
     // Suitable location just out of player view on land
-    _trypos = [_player, viewDistance - 200, viewDistance - 150, 0, 0] call BIS_fnc_findSafePos;
+    _trypos = [_player, HUNTER_SPAWN_DISTANCE - 200, HUNTER_SPAWN_DISTANCE - 150, 0, 0] call BIS_fnc_findSafePos;
     
     // Randomly choose a class of civilian to spawn
     private _spawn_man_class = _man_classes select (floor random count _man_classes) ;
@@ -50,7 +50,7 @@ while {true} do {
   private _tmpdelete = [] ;
   {
     private _v = _x ;
-    private _numInView = {_x distance _v < (viewDistance)} count _players ;
+    private _numInView = {_x distance _v < (HUNTER_SPAWN_DISTANCE)} count _players ;
     if (_numInView == 0) then {
       _tmpdelete pushBack _v ;
       //diag_log format ["%1 Removing civilian %2", time, name _v] ;

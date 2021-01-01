@@ -11,7 +11,7 @@ if (!isNil "_location" && side _unit == west) then {
   _l_name = (_location select 1) ;
   _l_spawned_veh = (_location select 8) ;
 
-  diag_log format ["%1: vehicle %2 entered at/for location %3, captured by player %4", time, _vehicle, _l_name, name _unit] ;
+  //diag_log format ["%1: vehicle %2 entered at/for location %3, captured by player %4", time, _vehicle, _l_name, name _unit] ;
 
   // if the entity has left the server instance and was spawned from the location then
   // remove from list of spawned vehicles

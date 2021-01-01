@@ -8,40 +8,43 @@ private _l_size = (_l select 3) ;
 private _l_sector = (_l select 4) ;
 private _l_vehicles = (_l select 6) ;
 private _max_loc_radius = selectMax _l_size ;
+private _destination_pos = _l_pos ;
+private _overWater = false ;
+private _trypos = [0,0,0] ;
 
-// 5 min timeout
-_timeout = 60 * 5 ;
+// 10 min timeout
+_timeout = 60 * 10 ;
 
-private _players = call BIS_fnc_listPlayers ;
-private _player = _players select (floor random count _players);
+if (!([_l_pos] call h_posOnLand)) then {
+  // loction position is in the water
+  _roads = _l_pos nearRoads _max_loc_radius;
+  if (count _roads > 0) then {
+    _destination_pos = (getRoadInfo (_roads select 0)) select 6 ;
+  }else{ // No roads nearby, must be by water
+    _overWater = true ;
+  };
+}; 
 
-// Suitable location just out of player view on land or water
-private _overWater = !(_l_pos isFlatEmpty  [-1, -1, -1, -1, 2, false] isEqualTo []);
-private _trypos = [0,0,0];
 private _vehclass = "" ;
 private _threat = [_l_sector] call h_getSectorThreat ;
 if (_overWater) then {
-  // Get position in water
-  _trypos = [position _player, viewDistance, viewDistance + 100, 0, 2] call BIS_fnc_findSafePos;
+  // start position in water, use fallback routine
+  _trypos = [_l, HunterNetwork, [HUNTER_CUSTOM_LOCATION], false, true] call h_locationSupplyPos ;
+  // Get water vehicle
   _vehclass = "O_Boat_Transport_01_F" ;
 }else{
-  // Get start position on land
-  _trypos = [position _player, viewDistance, viewDistance + 100, 0, 0] call BIS_fnc_findSafePos;
-  private _roads = _trypos nearRoads 500;
-  if (count _roads == 0) exitWith {} ;
-
-  // Select a road object and spawn there
-  _rnd_road = _roads select (floor random count _roads);
-  _trypos = getPos _rnd_road  ;
-  
+  // Find position to supply over land. If no locations in network then don't try alternative positions. 
+  _trypos = [_l, HunterNetwork, [HUNTER_CUSTOM_LOCATION], true, false] call h_locationSupplyPos ;
   // Get a random transport vehicle depending on the sector threat level
   _vehclass = [HUNTER_THREAT_RESUPPLY_VEHICLE, _threat] call h_getRandomThreat ;
 } ;
 
+// Cannot find a start point. Reason could be due to no locations in network to supply
+// TO DO: supply by air
+if (_trypos isEqualTo [0,0,0]) exitWith {};
 
 _v = createVehicle [_vehclass, _trypos, [], 0, "NONE"];
-_v setPosATL _trypos ;
-[_v] spawn spawn_protection ;
+[_v, _trypos] spawn spawn_protection ;
 _v addEventHandler["GetIn", {_this call event_getin}] ;
 _v call h_setManagedVehicle ;
 createVehicleCrew _v ;
@@ -77,7 +80,7 @@ while {_respawn_counter > 0} do {
 diag_log format["%1: Spawned resupply vehicle %2, with %3 soldiers, going to %4", time, _vehclass, count units _grp, _l_name] ;
 
 // If units spawned within location then skip travel and just attribute to location
-if (_trypos distance2D _l_pos > _max_loc_radius) then {
+if (_trypos distance2D _destination_pos > _max_loc_radius) then {
 
   // Set up travel waypoints
   for "_i" from (count waypoints _grp) - 1 to 0 step -1 do
@@ -85,10 +88,7 @@ if (_trypos distance2D _l_pos > _max_loc_radius) then {
     deleteWaypoint [_grp, _i];
   };
 
-  //private _wp = _grp addWaypoint [_trypos, 1];
-  //_wp setWaypointType "MOVE";
-  //_wp setWaypointCompletionRadius 200;
-  _wp = _grp addWaypoint [_l_pos, _max_loc_radius / 2];
+  _wp = _grp addWaypoint [_destination_pos, _max_loc_radius / 2];
   _wp setWaypointType "MOVE";
   _wp setWaypointCompletionRadius _max_loc_radius;
   _grp setCurrentWaypoint [_grp, 0];
@@ -122,7 +122,7 @@ if (_timeout <= 0) exitWith {
 // Reached destination location or all units are dead
 _alive_resupply = { alive _x } count (units _grp) ;
 
-if (_alive_resupply > 0) then {
+if (_alive_resupply > 0 && _timeout > 0) then {
   _l_active = (_l select 9) ;
   _l_percent = (_l select 5) ;
   // Update percentage resupplied at location
