@@ -9,6 +9,7 @@ private _l_pos = (_l select 2) ;
 private _l_size = (_l select 3) ;
 private _loc_network = [] ;
 private _players = call BIS_fnc_listPlayers ;
+private _include_location_class = [] ;
 
 private _fallback = true ;
 private _return_pos = [0,0,0] ;
@@ -26,6 +27,11 @@ private _return_pos = [0,0,0] ;
 
 diag_log format["h_locationSupplyPos: network search returned %1 network", _loc_network] ;
 
+if (!_byland) then {
+  // Set the include list
+  _include_location_class = ["NameMarine"] ;
+};
+
 if (count _loc_network > 0) then {
   // Search for resupply location that the players cannot see spawning
   _location_candidates = [] ;
@@ -39,8 +45,15 @@ if (count _loc_network > 0) then {
         !(_l isEqualTo _network_location) &&
         _network_location_percent > 0 &&
         {_x distance _network_location_pos <= HUNTER_SPAWN_DISTANCE} count _players == 0) then {
-      _location_candidates pushBack _network_location ;
-    } ;
+      if (_include_location_class > 0) then {
+        // Explicit inclusion of locations set
+        if (_network_location_type in _include_location_class) then {
+          _location_candidates pushBack _network_location ;
+        };
+      }else{ // Always include if inclusion list is empty
+        _location_candidates pushBack _network_location ;
+      };
+    };
   }forEach _loc_network ;
   
   // Sort the resulting array of locations into distance from resupply location
@@ -56,7 +69,10 @@ if (count _loc_network > 0) then {
     _return_pos = (_selected_location select 2) ; // use position of location
     _selected_location_size = (_selected_location select 3) ;
     _max_size = (_selected_location_size select 0) max (_selected_location_size select 1) ;
-    _roads = _return_pos nearRoads _max_size;
+    _roads = [] ;
+    if (_byland) then {
+      _roads = _return_pos nearRoads _max_size;
+    } ;
     if (count _roads > 0) then { // Check if nearby road and update position to be on road
       _road = _roads select (floor random count _roads);
       _return_pos = (getRoadInfo _road) select 6 ;

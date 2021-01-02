@@ -34,11 +34,11 @@ HUNTER_HEATMAP_AGE = 30 ; // minutes
 HUNTER_HEAT_THRESHOLD = 5; // number of kills to trigger CAS response
 HUNTER_SPAWN_LOCATIONS = [
                          ["NameCity",20], 
-						 ["NameCityCapital", 30], 
-						 ["NameVillage", 10], 
-						 ["Airport", 30], 
-						 [HUNTER_CUSTOM_LOCATION, 5]
-						 ] ;
+                         ["NameCityCapital", 30], 
+                         ["NameVillage", 10], 
+                         ["Airport", 30], 
+                         [HUNTER_CUSTOM_LOCATION, 5]
+                         ] ;
 HUNTER_THREAT_MAPPING_SOLDIER = [
                                 [0,["C_man_polo_3_F_afro", "C_man_polo_1_F_afro", "C_man_polo_2_F_afro", "C_man_polo_4_F_afro", "C_man_polo_5_F_afro", "C_man_polo_6_F_afro", "C_man_hunter_1_F"]],
                                 [5,["O_G_Soldier_F", "O_G_Soldier_lite_F", "O_G_Soldier_SL_F", "O_G_Soldier_AR_F", "O_G_medic_F", "O_G_engineer_F", "O_G_Soldier_GL_F", "O_G_Soldier_M_F", "O_G_Soldier_LAT_F"]],
@@ -77,4 +77,10 @@ HUNTER_THREAT_SAD_VEHICLE = [
                                  [30, ["O_T_MRAP_02_hmg_ghex_F"]],
                                  [50, ["O_T_MRAP_02_gmg_ghex_F", "O_T_MRAP_02_hmg_ghex_F"]],
                                  [80, ["O_T_MRAP_02_gmg_ghex_F", "O_T_APC_Tracked_02_cannon_ghex_F", "O_T_APC_Wheeled_02_rcws_ghex_F"]]
+                                 ];
+HUNTER_THREAT_RESUPPLY_AIR =     [
+                                 [0, ["O_Heli_Light_02_F"]]
+                                 ];
+HUNTER_THREAT_RESUPPLY_SEA =     [
+                                 [0, ["O_Boat_Transport_01_F"]]
                                  ];
