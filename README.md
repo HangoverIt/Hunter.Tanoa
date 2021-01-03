@@ -59,3 +59,5 @@ This is an array of networks. Each network is an array of locations that are all
 **HunterHeatMap** - A list of locations attacked by the player. Number of kills and when are recorded in the heatmap. Entries expire after time.
  
 **HUNTER_CAMP** - information on any deployed player camp
+
+**HunterSpotterLastSeen** - created by the spotter plane, this is a global containing last position spotted and time (given in game time)

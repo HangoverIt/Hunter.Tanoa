@@ -60,7 +60,7 @@ if (!_overWater && _trypos isEqualTo [0,0,0]) then {
 };
 
 // Cannot find a start point. Reason could be due to no locations in network to supply and no route over water
-// fallback to air supply`
+// fallback to air supply
 if (_trypos isEqualTo [0,0,0]) then {
   _players = call BIS_fnc_listPlayers ;
   _vehclass = [HUNTER_THREAT_RESUPPLY_AIR, _threat] call h_getRandomThreat ;
