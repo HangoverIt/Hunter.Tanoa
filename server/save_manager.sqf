@@ -37,7 +37,7 @@ while {true} do {
     _baseitems = ([HUNTER_SAVE_CLASSES, _basepos, HUNTER_BASE_RADIUS, [west,civilian]] call h_createSaveList) ;
     _baseitems append ([["Man"], _basepos, HUNTER_BASE_RADIUS, [west]] call h_createSaveList) ;
     
-    diag_log format ["Saving base %1 with items %2", _basename, _baseitems] ;
+    //diag_log format ["Saving base %1 with items %2", _basename, _baseitems] ;
     _bases pushBack [_basename, _basepos, _baseitems] ;
   }forEach HunterBases ;
   
@@ -48,7 +48,7 @@ while {true} do {
       if (!isNull _hunter) then {
         
         _saveplayer = getUnitLoadout _hunter;
-        diag_log format["Saving player hunt%1 equipment %2", _forEachIndex, _saveplayer] ;
+        //diag_log format["Saving player hunt%1 equipment %2", _forEachIndex, _saveplayer] ;
         
         HunterPlayers set [_forEachIndex, [_saveplayer]];
       };   
@@ -60,5 +60,5 @@ while {true} do {
   profileNamespace setVariable [HUNTER_SAVE_VAR, _savegame] ;
   saveProfileNamespace ;
   
-  diag_log format ["%1: Saved game %2 objects saved, %3 player data saved", time, count _saveobjs, count _saveplayers];
+  //diag_log format ["%1: Saved game %2 objects saved, %3 player data saved", time, count _saveobjs, count _saveplayers];
 };

@@ -45,7 +45,7 @@ if (count _loc_network > 0) then {
         !(_l isEqualTo _network_location) &&
         _network_location_percent > 0 &&
         {_x distance _network_location_pos <= HUNTER_SPAWN_DISTANCE} count _players == 0) then {
-      if (_include_location_class > 0) then {
+      if (count _include_location_class > 0) then {
         // Explicit inclusion of locations set
         if (_network_location_type in _include_location_class) then {
           _location_candidates pushBack _network_location ;

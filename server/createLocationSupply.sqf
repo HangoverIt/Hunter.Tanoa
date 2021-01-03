@@ -62,10 +62,21 @@ if (!_overWater && _trypos isEqualTo [0,0,0]) then {
 // Cannot find a start point. Reason could be due to no locations in network to supply and no route over water
 // fallback to air supply`
 if (_trypos isEqualTo [0,0,0]) then {
+  _players = call BIS_fnc_listPlayers ;
   _vehclass = [HUNTER_THREAT_RESUPPLY_AIR, _threat] call h_getRandomThreat ;
   _veh_additional = "FLY" ;
   _airlift = true ;
   diag_log format ["createLocationSupply: could not find a start point, using air supply using %1", _vehclass];
+  _trypos = [0,15000,200] ; // edge of map spawn
+  // Can the heli start near an airbase?
+  {
+    _air_loc_type = (_x select 0) ;
+    _air_loc_pos = (_x select 2) ;
+    if ((_air_loc_type == "Airport" || _air_loc_type == "NameLocal") && {_x distance _air_loc_pos <= HUNTER_SPAWN_DISTANCE} count _players == 0) exitWith {
+      _trypos = _air_loc_pos;
+    };
+  }forEach HunterLocations; 
+  _trypos set [2, 150] ;
 };
 
 _v = createVehicle [_vehclass, _trypos, [], 0, _veh_additional];
@@ -89,10 +100,11 @@ if (_freecargo < _respawn_size) then {
 
 // Create resupply units
 private _grp = group (leader _v);
+private _cargogrp = createGroup east ; // New group to the crew
 private _respawn_counter = _respawn_size;
 while {_respawn_counter > 0} do {
   _manclass = [HUNTER_THREAT_MAPPING_SOLDIER, _threat] call h_getRandomThreat ;
-  _unit = _grp createUnit[_manclass, _trypos, [], 0, "NONE" ] ;
+  _unit = _cargogrp createUnit[_manclass, _trypos, [], 0, "NONE" ] ;
   _unit assignAsCargo _v ;
   _unit moveInCargo _v ;
   
@@ -102,14 +114,14 @@ while {_respawn_counter > 0} do {
 // Add kill handler for resupply units
 {
   _x addEventHandler["Killed", {_this call kill_manager}];
-}forEach units _grp ;
+}forEach (units _grp) + (units _cargogrp) ;
 
-diag_log format["%1: Spawned resupply vehicle %2, with %3 soldiers, going to %4", time, _vehclass, count units _grp, _l_name] ;
+diag_log format["createLocationSupply: Spawned resupply vehicle %2, with %3 soldiers, going to %4", time, _vehclass, count units _cargogrp + count units _grp, _l_name] ;
 
 // If units spawned within location then skip travel and just attribute to location
 if (_trypos distance2D _destination_pos > _max_loc_radius) then {
 
-  // Set up travel waypoints
+  // Set up travel waypoints for vehicle crew
   for "_i" from (count waypoints _grp) - 1 to 0 step -1 do {
     deleteWaypoint [_grp, _i];
   };
@@ -119,12 +131,10 @@ if (_trypos distance2D _destination_pos > _max_loc_radius) then {
   _wp setWaypointCompletionRadius _max_loc_radius;
   _grp setCurrentWaypoint [_grp, 0];
 
-  diag_log format ["createLocationSupply: resupply waypoints %2 with current waypoint %3, for group with units %4", time, waypoints _grp, currentWaypoint _grp, _grp, units _grp] ;
-
   waitUntil {
     sleep 10;
     _timeout = _timeout - 10;
-    ( { alive _x } count (units _grp) == 0 ) || currentWaypoint _grp > 0 || _timeout <= 0;
+    ( { alive _x } count ((units _grp) + (units _cargogrp)) == 0 ) || currentWaypoint _grp > 0 || _timeout <= 0;
   };
 };
 
@@ -139,7 +149,7 @@ if (_timeout <= 0) exitWith {
     }else{
       deleteVehicle _x ;
     };
-  }forEach units _grp ;
+  }forEach (units _grp) + (units _cargogrp) ;
   
   if ([_v] call h_isManagedVehicle) then {
     deleteVehicle _v ;
@@ -147,11 +157,23 @@ if (_timeout <= 0) exitWith {
 } ;
 
 // Reached destination location or all units are dead
-_alive_resupply = { alive _x } count (units _grp) ;
+_alive_resupply = { alive _x } count ((units _grp) + (units _cargogrp)) ;
+if (_airlift) then {
+  _alive_resupply = { alive _x } count (units _grp) ;
+};
 
 if (_alive_resupply > 0 && _timeout > 0) then {
   _l_active = (_l select 9) ;
   _l_percent = (_l select 5) ;
+  
+  _helipad = objNull ;
+  if (_airlift) then {
+    diag_log format ["createLocationSupply: air supply arriving, landing helicoptor at %1", _l_name] ;
+    sleep 2 ;
+    _v land "GET OUT" ;
+    waitUntil {sleep 2; (((getPosATL _v) select 2) <= 1) || !(alive _v) || { alive _x } count (units _grp) == 0 }; // wait until less than 1 metre
+  };
+  
   // Update percentage resupplied at location
   _newpercent = _l_percent + (_alive_resupply * (100 / (_loc_spawn select 0)));
   if (_newpercent > 100) then {_newpercent = 100;} ;
@@ -159,55 +181,55 @@ if (_alive_resupply > 0 && _timeout > 0) then {
   _l_spawn_man = (_l select 7);
   _l_spawn_veh = (_l select 8);
   
-  _helipad = objNull ;
-  if (_airlift) then {
-    _helipad = createVehicle ["Land_HelipadEmpty_F", _destination_pos, [], 0, "NONE"] ;
-    diag_log format ["createLocationSupply: air supply arrived, landing helicoptor at %1", _destination_pos] ;
-    sleep 2 ;
-    _v land "GET OUT" ;
-    sleep 15;
-  };
-  
   if (_l_active) then {
-    diag_log format["%1: Resupply vehicle %2, arrived at active location %4, with %3 soldiers", time, _vehclass, _alive_resupply, _l_name] ;
+    diag_log format["createLocationSupply: Resupply vehicle %2, arrived at active location %4, with %3 soldiers", time, _vehclass, _alive_resupply, _l_name] ;
     // Disembark units and add to location defense
-    _newgrp = createGroup east ;
-    _unitsnewgrp = [] ;
     {
-      if (!(_x in (crew _v))) then {
-        [_x] orderGetIn false ;
-        doGetOut [_x] ;
+      // A heli resupply will not include the crew, but other resupplies will include crew in defense
+      if (!_airlift || (_x in (units _cargogrp))) then {
+        _x setVariable["Location", _l] ;
+        _x setVariable["Percent", (100/(_loc_spawn select 0))] ;
+        _l_spawn_man pushBack _x ;
       };
-      _x setVariable["Location", _l] ;
-      _x setVariable["Percent", (100/(_loc_spawn select 0))] ;
-      _l_spawn_man pushBack _x ;
-      _unitsnewgrp pushBack _x ;
 
-    }forEach units _grp ;
-    _unitsnewgrp join _newgrp ; // Split the transport group into crew and cargo groups
+    }forEach (units _cargogrp + units _grp) ;
+    
+    {
+      [_x] orderGetIn false ;
+      doGetOut [_x] ;
+      unassignVehicle _x ;
+    }forEach units _cargogrp ;
+    
+    // Wait for all units to leave vehicle
+    waitUntil {sleep 1; ({alive _x && (_x in _v)} count (units _cargogrp) == 0)};
     
     if (_airlift) then {
-      // Wait for all units to leave vehicle and then set new waypoints
-      waitUntil {sleep 3; {alive _x && (_x in _v)} count units _grp == 0;};
-      deleteVehicle _helipad ;
       diag_log format ["createLocationSupply: helicoptor unloaded, leaving location %1", _l_name] ;
       for "_i" from (count waypoints _grp) - 1 to 0 step -1 do {
         deleteWaypoint [_grp, _i];
       };
-
       _wp = _grp addWaypoint [[-1000,-1000,100], 1];
       _wp setWaypointType "MOVE";
+      _wp setWaypointBehaviour "CARELESS" ;
       _grp setCurrentWaypoint [_grp, 0];
+      
+      // Heli may land a distance away so set walking waypoint for soldiers
+      for "_i" from (count waypoints _cargogrp) - 1 to 0 step -1 do {
+        deleteWaypoint [_cargogrp, _i];
+      };
+      _wp = _cargogrp addWaypoint [_destination_pos, 1];
+      _wp setWaypointType "MOVE";
+      _cargogrp setCurrentWaypoint [_cargogrp, 0];
       
       // Clean up crew and vehicle when out of range of players
       [_grp] spawn cleanup_manager;
-      [_vehicle] spawn cleanup_manager;
+      [_v] spawn cleanup_manager;
     }else{
       _l_spawn_veh pushBack _v ;
     };
     
   }else{
-    diag_log format["%1: Resupply vehicle %2, arrived at inactive location %4, with %3 soldiers, going to %4", time, _vehclass, _alive_resupply, _l_name] ;
+    diag_log format["createLocationSupply: Resupply vehicle %2, arrived at inactive location %4, with %3 soldiers", time, _vehclass, _alive_resupply, _l_name] ;
     // Despawn vehicle and units as no one here to see them
     {
       // Remove units from map
@@ -217,7 +239,7 @@ if (_alive_resupply > 0 && _timeout > 0) then {
       }else{
         deleteVehicle _x ;
       };
-    }forEach units _grp ;
+    }forEach (units _grp + units _cargogrp) ;
     
     deleteVehicle _v ;
   };
