@@ -30,8 +30,8 @@ while {true} do {
     private _player = _players select (floor random count _players);
     
     // Suitable location just out of player view on or out of water
-    _trypos = [_player, viewDistance, viewDistance + 20, 0, 1] call BIS_fnc_findSafePos;
-    //diag_log format ["%1: Selecting position %2, with view distance %3, distance from player %3", time, _trypos, viewDistance, _trypos distance (getPos _player)] ;
+    _trypos = [_player, HUNTER_SPAWN_DISTANCE, HUNTER_SPAWN_DISTANCE + 20, 0, 1] call BIS_fnc_findSafePos;
+    //diag_log format ["%1: Selecting position %2, with view distance %3, distance from player %3", time, _trypos, HUNTER_SPAWN_DISTANCE, _trypos distance (getPos _player)] ;
     
     // Check is location is over water
     private _overWater = !(_trypos isFlatEmpty  [-1, -1, -1, -1, 2, false] isEqualTo []);
@@ -90,7 +90,7 @@ while {true} do {
   {
     private _v = _x ;
     //diag_log format ["%1 Check vehicle %2 at %3 to player %4 at %5, distance %6", time, name _v,getPos _v, name _x, getPos _x, _x distance _v] ;
-    private _numInView = {_x distance _v < (viewDistance +100)} count _players ;
+    private _numInView = {_x distance _v < (HUNTER_SPAWN_DISTANCE +100)} count _players ;
     if (_numInView == 0) then {
       // None of the players can now see the vehicle in view distance
       _tmpdelete pushBack _v ;

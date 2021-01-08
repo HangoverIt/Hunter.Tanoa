@@ -4,7 +4,7 @@ params["_unit",["_timeout",0]] ;
 private _players = call BIS_fnc_listPlayers;
 private _timeoutobj = time + (_timeout * 60) ; // covert minutes to seconds
 if (typeName _unit == "GROUP") then {
-  while { alive (leader _unit) && {_x distance (leader _unit) < (viewDistance +100)} count _players > 0 && (_timeout == 0 || _timeoutobj > time)} do {
+  while { alive (leader _unit) && {_x distance (leader _unit) < (HUNTER_SPAWN_DISTANCE +100)} count _players > 0 && (_timeout == 0 || _timeoutobj > time)} do {
     sleep 20;
     if (!isNull ((leader _unit) findNearestEnemy (leader _unit))) then {
       _timeoutobj = time + (_timeout * 60) ; // reset any time out due to player contact
@@ -24,7 +24,7 @@ if (typeName _unit == "GROUP") then {
 
 }else{
   // Wait until out of view or time out exceeded
-  while { {_x distance _unit < (viewDistance +100)} count _players > 0 && (_timeout == 0 || _timeoutobj > time) && ([_unit] call h_isManagedVehicle)} do {
+  while { {_x distance _unit < (HUNTER_SPAWN_DISTANCE +100)} count _players > 0 && (_timeout == 0 || _timeoutobj > time) && ([_unit] call h_isManagedVehicle)} do {
     sleep 20;
   } ;
 

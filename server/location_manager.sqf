@@ -13,7 +13,6 @@ for "_i" from 0 to (count HunterLocations - 1) do {
   // Hold the resupply spawn handle
   _tmplocationinfo pushBack [scriptNull];
 };
-diag_log format ["Created tmp array %1", _tmplocationinfo] ;
 
 // Loop forever
 while {true} do {
@@ -81,7 +80,7 @@ while {true} do {
     
     if (_now >= _l_next_reinforce_time && _l_percent < 100 && isNull (_thislocationtmp select 0)) then {
       // Reinforcement timeout expired, the location is below 100% strength and there's not current reinforcement spawned
-      
+      diag_log format ["%1: Location %2 to be reinforced. Currently at %3 percent", time, _l_name, _l_percent] ;
       // Set next reinforcement timeout
       _x set [10, _now + (HUNTER_LOCATION_STD_THREAT_COOLDOWN *_min)] ;
       
