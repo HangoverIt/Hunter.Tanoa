@@ -52,4 +52,3 @@ player setUnitTrait ["Medic",true];
 player setUnitTrait ["Engineer",true];    
 
 
-

@@ -46,6 +46,7 @@ class CfgDebriefing
 #include "\A3\ui_f\hpp\defineCommonGrids.inc"
 #include "\A3\ui_f\hpp\defineCommonColors.inc"
 class RscPicture ;
+class RscText ;
 
 class RscTitles
 {
@@ -56,7 +57,7 @@ class RscTitles
     duration = 999999;
     idd = 8000;
     movingEnable = true;
-    controls[]= {TreeCoverRsc,BuildingCoverRsc} ;
+    controls[]= {TreeCoverRsc,BuildingCoverRsc,StatusRsc,BaseRsc,AttackRsc,AttackTxtRsc} ;
     class TreeCoverRsc: RscPicture {
       idc = 1200;
       type = 0;
@@ -81,9 +82,74 @@ class RscTitles
       sizeEx = 0.5;
       text = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\spacegarage_ca.paa";
       x = 1.55;
-      y = 0.54;
+      y = 0.50;
       w = 0.1;
       h = 0.1;
+    };
+    class BaseRsc: RscPicture {
+      idc = 1203;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.5;
+      //text = "\a3\modules_f\data\portraithq_ca.paa";
+      text = "\a3\modules_f\data\portraitsector_ca.paa";
+      //text = "\a3\modules_f\data\iconsector_ca.paa";
+      //text = "\a3\missions_f_curator\data\img\iconmptypesectorcontrol_ca.paa";
+      //text = "\a3\missions_f_curator\data\img\portraitmptypesectorcontrol_ca.paa"
+      x = 1.55;
+      y = 0.60;
+      w = 0.1;
+      h = 0.1;
+    };
+    class AttackRsc: RscPicture {
+      idc = 1203;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.5;
+      text = "\a3\ui_f\data\igui\cfg\cursors\attack_ca.paa"; // under attack
+      //text = "\a3\modules_f_curator\data\portraitradio_ca.paa" // radio
+      //text = "\a3\modules_f_curator\data\portraitskiptime_ca.paa" // time
+      x = 1.30;
+      y = -0.2;
+      w = 0.1;
+      h = 0.1;
+    };
+    class AttackTxtRsc: RscText
+    {
+      idc = 1202;
+      type = 0;
+      style = 0;
+      colorBackground[] = { 0, 0, 0, 0.1 };
+      colorText[] = {1,1,1,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.04;
+      x = 1.4;
+      y = -0.2;
+      w = 0.30;
+      h = 0.1;
+      text = "Base under attack 4:00 min";
+    };
+    
+    class StatusRsc: RscText
+    {
+      idc = 1202;
+      type = 0;
+      style = 0;
+      colorBackground[] = { 0, 0, 0, 0.1 };
+      colorText[] = {1,1,1,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.04;
+      x = -0.0242423;
+      y = -0.379273;
+      w = 1.06061;
+      h = 0.0363636;
+      text = "";
     };
   };
 };
