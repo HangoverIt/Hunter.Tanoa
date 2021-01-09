@@ -46,7 +46,7 @@ private _all_objs = [] ;
       };
     }forEach everyContainer _obj;
     
-    [_obj] spawn spawn_protection ;
+    [_obj, _objpos] spawn spawn_protection ;
   };
   _obj setDir _objdir;
   

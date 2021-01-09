@@ -10,6 +10,7 @@ h_isSectorMission = compileFinal preprocessFileLineNumbers "functions\h_isSector
 h_setSectorThreat = compileFinal preprocessFileLineNumbers "functions\h_setSectorThreat.sqf";
 h_getSectorName = compileFinal preprocessFileLineNumbers "functions\h_getSectorName.sqf";
 h_getSectorBaseThreat = compileFinal preprocessFileLineNumbers "functions\h_getSectorBaseThreat.sqf";
+
 h_getRandomThreat = compileFinal preprocessFileLineNumbers "functions\h_getRandomThreat.sqf" ;
 h_createSaveList = compileFinal preprocessFileLineNumbers "functions\h_createSaveList.sqf" ;
 h_restoreSaveList = compileFinal preprocessFileLineNumbers "functions\h_restoreSaveList.sqf" ;
@@ -24,6 +25,8 @@ h_isSectorAtMaxThreat = compileFinal preprocessFileLineNumbers "functions\h_isSe
 h_getSectorFromPosition = compileFinal preprocessFileLineNumbers "functions\h_getSectorFromPosition.sqf" ;
 h_max_connected_road = compileFinal preprocessFileLineNumbers "functions\h_max_connected_road.sqf" ;
 h_roadCallback = compileFinal preprocessFileLineNumbers "functions\h_roadCallback.sqf" ;
+h_posOnLand = compileFinal preprocessFileLineNumbers "functions\h_posOnLand.sqf" ;
+h_locationSupplyPos = compileFinal preprocessFileLineNumbers "functions\h_locationSupplyPos.sqf" ;
 
 //event_capture = compileFinal preprocessFileLineNumbers "server\event_capture.sqf";
 event_getin = compileFinal preprocessFileLineNumbers "server\event_getin.sqf";
@@ -43,9 +46,9 @@ build_base = compileFinal preprocessFileLineNumbers "server\build_base.sqf" ;
 reset_game_save = compileFinal preprocessFileLineNumbers "server\reset_game_save.sqf" ;
 
 [] call compileFinal preprocessFileLineNumbers "server\load_savegame.sqf";
+[] call compileFinal preprocessFileLineNumbers "server\manage_players.sqf";
 [] call compileFinal preprocessFileLineNumbers "server\define_sectors.sqf";
 [] call compileFinal preprocessFileLineNumbers "server\define_locations.sqf"; // Must run after define_sectors
-[] call compileFinal preprocessFileLineNumbers "server\manage_players.sqf";
 [] call compileFinal preprocessFileLineNumbers "server\define_bases.sqf";
 
 [] spawn compileFinal preprocessFileLineNumbers "server\manage_camp.sqf";
@@ -53,8 +56,15 @@ reset_game_save = compileFinal preprocessFileLineNumbers "server\reset_game_save
 [] spawn compileFinal preprocessFileLineNumbers "server\location_manager.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\manage_missions.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\save_manager.sqf";
+<<<<<<< HEAD
 [] spawn compileFinal preprocessFileLineNumbers "server\ambient_enemy_manager.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\ambient_vehicle_manager.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\ambient_people_manager.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\enemy_intelligence.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\manage_economy.sqf";
+=======
+//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_enemy_manager.sqf";
+//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_vehicle_manager.sqf";
+//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_people_manager.sqf";
+//[] spawn compileFinal preprocessFileLineNumbers "server\enemy_intelligence.sqf";
+>>>>>>> 0c598e7c42101a603694447fd973fe2db2e2ab0d
