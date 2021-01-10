@@ -62,7 +62,7 @@ if ( isServer ) then {
   // Grant cash reward for a kill
   private _cash = HunterEconomy select 0;
   _cash = _cash + CASH_REWARD;
-  //HunterEconomy set [0, _cash];
+  HunterEconomy set [0, _cash];
   hint format ["%1 earned", HunterEconomy select 0];
 
   
