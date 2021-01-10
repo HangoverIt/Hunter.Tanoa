@@ -56,7 +56,9 @@ reset_game_save = compileFinal preprocessFileLineNumbers "server\reset_game_save
 [] spawn compileFinal preprocessFileLineNumbers "server\location_manager.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\manage_missions.sqf";
 [] spawn compileFinal preprocessFileLineNumbers "server\save_manager.sqf";
-//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_enemy_manager.sqf";
-//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_vehicle_manager.sqf";
-//[] spawn compileFinal preprocessFileLineNumbers "server\ambient_people_manager.sqf";
-//[] spawn compileFinal preprocessFileLineNumbers "server\enemy_intelligence.sqf";
+
+[] spawn compileFinal preprocessFileLineNumbers "server\ambient_enemy_manager.sqf";
+[] spawn compileFinal preprocessFileLineNumbers "server\ambient_vehicle_manager.sqf";
+[] spawn compileFinal preprocessFileLineNumbers "server\ambient_people_manager.sqf";
+[] spawn compileFinal preprocessFileLineNumbers "server\enemy_intelligence.sqf";
+[] spawn compileFinal preprocessFileLineNumbers "server\manage_economy.sqf";
