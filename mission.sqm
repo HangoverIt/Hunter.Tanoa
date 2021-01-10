@@ -16,7 +16,7 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=27;
+		nextID=29;
 	};
 	class Camera
 	{
@@ -2254,6 +2254,7 @@ class Mission
 			};
 			id=175;
 			type="Land_PaperBox_closed_F";
+			atlOffset=0.0016951561;
 		};
 		class Item71
 		{
@@ -2270,6 +2271,7 @@ class Mission
 			};
 			id=176;
 			type="Land_PaperBox_closed_F";
+			atlOffset=0.0016951561;
 		};
 		class Item72
 		{
@@ -2286,6 +2288,7 @@ class Mission
 			};
 			id=177;
 			type="Land_PaperBox_closed_F";
+			atlOffset=0.0016951561;
 		};
 		class Item73
 		{
@@ -2318,6 +2321,7 @@ class Mission
 			};
 			id=179;
 			type="Land_Ammobox_rounds_F";
+			atlOffset=0.0016951561;
 		};
 		class Item75
 		{
@@ -2350,6 +2354,7 @@ class Mission
 			};
 			id=189;
 			type="Land_Pallets_F";
+			atlOffset=0.0016951561;
 		};
 		class Item77
 		{
