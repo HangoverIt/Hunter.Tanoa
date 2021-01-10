@@ -67,10 +67,10 @@ class RscTitles
       font = "puristaMedium";
       sizeEx = 0.5;
       text = "a3\modules_f\data\hideterrainobjects\icon32_ca.paa";
-      x = 1.55;
-      y = 0.54;
-      w = 0.1;
-      h = 0.1;
+      x = 1.65;
+      y = -0.20;
+      w = 0.05;
+      h = 0.05;
     };
     class BuildingCoverRsc: RscPicture {
       idc = 1201;
@@ -81,61 +81,11 @@ class RscTitles
       font = "puristaMedium";
       sizeEx = 0.5;
       text = "\a3\ui_f\data\gui\rsc\rscdisplayarsenal\spacegarage_ca.paa";
-      x = 1.55;
-      y = 0.50;
-      w = 0.1;
-      h = 0.1;
+      x = 1.65;
+      y = -0.20;
+      w = 0.05;
+      h = 0.05;
     };
-    class BaseRsc: RscPicture {
-      idc = 1203;
-      type = 0;
-      style = 48;
-      colorBackground[] = { 0, 0, 0, 0 };
-      colorText[] = {0.8,0.8,0.8,0.9};
-      font = "puristaMedium";
-      sizeEx = 0.5;
-      //text = "\a3\modules_f\data\portraithq_ca.paa";
-      text = "\a3\modules_f\data\portraitsector_ca.paa";
-      //text = "\a3\modules_f\data\iconsector_ca.paa";
-      //text = "\a3\missions_f_curator\data\img\iconmptypesectorcontrol_ca.paa";
-      //text = "\a3\missions_f_curator\data\img\portraitmptypesectorcontrol_ca.paa"
-      x = 1.55;
-      y = 0.60;
-      w = 0.1;
-      h = 0.1;
-    };
-    class AttackRsc: RscPicture {
-      idc = 1203;
-      type = 0;
-      style = 48;
-      colorBackground[] = { 0, 0, 0, 0 };
-      colorText[] = {0.8,0.8,0.8,0.9};
-      font = "puristaMedium";
-      sizeEx = 0.5;
-      text = "\a3\ui_f\data\igui\cfg\cursors\attack_ca.paa"; // under attack
-      //text = "\a3\modules_f_curator\data\portraitradio_ca.paa" // radio
-      //text = "\a3\modules_f_curator\data\portraitskiptime_ca.paa" // time
-      x = 1.30;
-      y = -0.2;
-      w = 0.1;
-      h = 0.1;
-    };
-    class AttackTxtRsc: RscText
-    {
-      idc = 1202;
-      type = 0;
-      style = 0;
-      colorBackground[] = { 0, 0, 0, 0.1 };
-      colorText[] = {1,1,1,0.9};
-      font = "puristaMedium";
-      sizeEx = 0.04;
-      x = 1.4;
-      y = -0.2;
-      w = 0.30;
-      h = 0.1;
-      text = "Base under attack 4:00 min";
-    };
-    
     class StatusRsc: RscText
     {
       idc = 1202;
@@ -151,5 +101,56 @@ class RscTitles
       h = 0.0363636;
       text = "";
     };
+    class BaseRsc: RscPicture {
+      idc = 1203;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.2;
+      //text = "\a3\modules_f\data\portraithq_ca.paa";
+      //text = "\a3\modules_f\data\portraitsector_ca.paa";
+      //text = "\a3\modules_f\data\iconsector_ca.paa";
+      //text = "\a3\missions_f_curator\data\img\iconmptypesectorcontrol_ca.paa";
+      text = "\a3\missions_f_curator\data\img\portraitmptypesectorcontrol_ca.paa"
+      x = 1.60;
+      y = -0.20;
+      w = 0.05;
+      h = 0.05;
+    };
+    class AttackRsc: RscPicture {
+      idc = 1204;
+      type = 0;
+      style = 48;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {0.8,0.8,0.8,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.5;
+      //text = "\a3\ui_f\data\igui\cfg\cursors\attack_ca.paa"; // under attack
+      //text = "\a3\modules_f_curator\data\portraitradio_ca.paa" // radio
+      text = "\a3\modules_f_curator\data\portraitskiptime_ca.paa" // time
+      x = 1.30;
+      y = -0.15;
+      w = 0.1;
+      h = 0.1;
+    };
+    class AttackTxtRsc: RscText
+    {
+      idc = 1205;
+      type = 0;
+      style = 0;
+      colorBackground[] = { 0, 0, 0, 0 };
+      colorText[] = {1,1,1,0.9};
+      font = "puristaMedium";
+      sizeEx = 0.04;
+      x = 1.4;
+      y = -0.15;
+      w = 0.30;
+      h = 0.1;
+      text = "Base under attack 4:00 min";
+    };
+    
+    
   };
 };
