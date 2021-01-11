@@ -27,14 +27,13 @@ _buildingpositions = [];
 
 private _grp = createGroup east;
 
-_location_spawn_size = [_l] call h_locationSpawnSize ;
-private _squad_size = _location_spawn_size select 0 ;
+private _location_spawn_size = [_l] call h_locationSpawnSize ;
 
 // Randomise the building positions occupied by soldiers
 _buildingpositions = _buildingpositions call BIS_fnc_arrayShuffle ;
 _building_iterator = 0 ;
 
-private _remaining_to_spawn = _location_spawn_size select 1 ; ;
+private _remaining_to_spawn = _location_spawn_size select 1 ;
 private _threat = [_l_sector] call h_getSectorThreat ;
 private _all_units = [] ;
 private _all_vehicles = [] ;
@@ -51,14 +50,12 @@ while {_remaining_to_spawn > 0} do {
     _veh = createVehicle [_vehclass, _spawnpos, [], 0, "NONE"] ;
     [_veh, _spawnpos] spawn spawn_protection ;
     _veh addEventHandler["GetIn", {_this call event_getin}] ;
-    _veh setVariable["Location", _l] ;
+    [_veh, _l] call h_assignToLocation ;
 
     createVehicleCrew _veh ;
     // Add killed handler and variables
     {
-      _x addEventHandler["Killed", {_this call kill_manager}];
-      _x setVariable["Location", _l] ;
-      _x setVariable["Percent", (100/_squad_size)] ;
+      [_x, _l] call h_assignToLocation ;
       _all_units pushBack _x ;
     }forEach crew _veh ;
     // deduct the number of crew, note that this could make the remaining negative
@@ -73,14 +70,10 @@ while {_remaining_to_spawn > 0} do {
     }else{
       //////////////////////////
       // Spawn in building
-      _manclass = [HUNTER_THREAT_MAPPING_SOLDIER, _threat] call h_getRandomThreat ;
-      //diag_log format ["%1: spawning man %2 in building pos %3 for threat %4", time, _manclass, (_buildingpositions select _building_iterator), _threat] ;
-      _unit = _grp createUnit[_manclass, (_buildingpositions select _building_iterator), [], 0, "NONE" ] ;
+      //diag_log format ["%1: spawning man in building pos %2 for threat %3", time, (_buildingpositions select _building_iterator), _threat] ;
+      _unit = [_grp, (_buildingpositions select _building_iterator), HUNTER_THREAT_MAPPING_SOLDIER, _l] call h_createUnit ;
       _building_iterator = _building_iterator + 1;
       [_unit] spawn enemy_building_defense ;
-      _unit addEventHandler["Killed", {_this call kill_manager}];
-      _unit setVariable["Location", _l] ;
-      _unit setVariable["Percent", (100/_squad_size)] ;
       
       _all_units pushBack _unit ;
       _remaining_to_spawn = _remaining_to_spawn - 1;
@@ -93,12 +86,8 @@ while {_remaining_to_spawn > 0} do {
     _spawnpos = [_l_pos, 0, _max_loc_radius, 0, 0] call BIS_fnc_findSafePos;
     //diag_log format ["%1: spawning squad size %2 at %3", time, _rndsize, _spawnpos] ;
     for [{private _i = 0}, {_i < _rndsize && _remaining_to_spawn > 0}, {_i = _i + 1}] do {
-      _manclass = [HUNTER_THREAT_MAPPING_SOLDIER, _threat] call h_getRandomThreat ;
-      //diag_log format ["%1: spawning squad member %2 for threat %3", time, _manclass, _threat] ;
-      _unit = _patrolgrp createUnit[_manclass, _spawnpos, [], 0, "NONE" ] ;
-      _unit addEventHandler["Killed", {_this call kill_manager}];
-      _unit setVariable["Location", _l] ;
-      _unit setVariable["Percent", (100/_squad_size)] ;
+      //diag_log format ["%1: spawning squad member for threat %2", time, _threat] ;
+      _unit = [_grp, _spawnpos, HUNTER_THREAT_MAPPING_SOLDIER, _l] call h_createUnit ;
       
       _all_units pushBack _unit ;
       _remaining_to_spawn = _remaining_to_spawn - 1;

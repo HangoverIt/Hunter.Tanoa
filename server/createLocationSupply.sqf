@@ -103,8 +103,7 @@ private _grp = group (leader _v);
 private _cargogrp = createGroup east ; // New group to the crew
 private _respawn_counter = _respawn_size;
 while {_respawn_counter > 0} do {
-  _manclass = [HUNTER_THREAT_MAPPING_SOLDIER, _threat] call h_getRandomThreat ;
-  _unit = _cargogrp createUnit[_manclass, _trypos, [], 0, "NONE" ] ;
+  _unit = [_grp, _trypos, HUNTER_THREAT_MAPPING_SOLDIER, _l] call h_createUnit ;
   _unit assignAsCargo _v ;
   _unit moveInCargo _v ;
   
@@ -187,8 +186,7 @@ if (_alive_resupply > 0 && _timeout > 0) then {
     {
       // A heli resupply will not include the crew, but other resupplies will include crew in defense
       if (!_airlift || (_x in (units _cargogrp))) then {
-        _x setVariable["Location", _l] ;
-        _x setVariable["Percent", (100/(_loc_spawn select 0))] ;
+        [_x, _l] call h_assignToLocation ;
         _l_spawn_man pushBack _x ;
       };
 
