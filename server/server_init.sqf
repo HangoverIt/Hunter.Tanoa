@@ -27,6 +27,8 @@ h_max_connected_road = compileFinal preprocessFileLineNumbers "functions\h_max_c
 h_roadCallback = compileFinal preprocessFileLineNumbers "functions\h_roadCallback.sqf" ;
 h_posOnLand = compileFinal preprocessFileLineNumbers "functions\h_posOnLand.sqf" ;
 h_locationSupplyPos = compileFinal preprocessFileLineNumbers "functions\h_locationSupplyPos.sqf" ;
+h_createUnit = compileFinal preprocessFileLineNumbers "functions\h_createUnit.sqf" ;
+h_assignToLocation = compileFinal preprocessFileLineNumbers "functions\h_assignToLocation.sqf" ;
 
 //event_capture = compileFinal preprocessFileLineNumbers "server\event_capture.sqf";
 event_getin = compileFinal preprocessFileLineNumbers "server\event_getin.sqf";

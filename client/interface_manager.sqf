@@ -8,7 +8,11 @@ while {true} do {
   if (!isNil "_dialog" ) then {
     if (!isNull _dialog) then {
       _statusctl = _dialog displayCtrl 1202 ;
-      _statusctl ctrlSetText format [ "Hunter 0.1      Cash %1$", 1000 ];
+      _player_cash = -1 ;
+      if (!isNil "HunterEconomy") then {
+        _player_cash = HunterEconomy select 0 ;
+      };
+      _statusctl ctrlSetText format [ "Hunter 0.1  |  Cash %1$", _player_cash ];
       
       _basectl = _dialog displayCtrl 1203 ;
       _attackctl = _dialog displayCtrl 1204 ;

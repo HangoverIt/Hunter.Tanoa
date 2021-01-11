@@ -75,8 +75,7 @@ private _freecargo = _vehicle emptyPositions "cargo" ;
 
 while{_freecargo > 0} do {
   _manclass = [HUNTER_THREAT_MAPPING_SOLDIER, _max_threat] call h_getRandomThreat ;
-  _sadunit = _grp createUnit[_manclass, _trypos, [], 0, "NONE" ] ;
-  _sadunit addEventHandler["Killed", {_this call kill_manager}];
+  _sadunit = [_grp, _trypos, [_manclass]] call h_createUnit ;
   _all_units pushBack _sadunit ;
   _sadunit assignAsCargo _vehicle ;
   _sadunit moveInCargo _vehicle;
