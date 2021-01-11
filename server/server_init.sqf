@@ -35,6 +35,7 @@ event_getin = compileFinal preprocessFileLineNumbers "server\event_getin.sqf";
 trigger_spawn_location = compileFinal preprocessFileLineNumbers "server\trigger_spawn_location.sqf";
 trigger_despawn_location = compileFinal preprocessFileLineNumbers "server\trigger_despawn_location.sqf";
 kill_manager = compileFinal preprocessFileLineNumbers "server\kill_manager.sqf";
+vehicle_destruction_manager = compileFinal preprocessFileLineNumbers "server\vehicle_destruction_manager.sqf";
 enemy_base_defense = compileFinal preprocessFileLineNumbers "server\enemy_base_defense.sqf" ;
 enemy_building_defense = compileFinal preprocessFileLineNumbers "server\enemy_building_defense.sqf" ;
 spawn_location = compileFinal preprocessFileLineNumbers "server\spawn_location.sqf" ;

@@ -50,10 +50,10 @@ while {_remaining_to_spawn > 0} do {
     _veh = createVehicle [_vehclass, _spawnpos, [], 0, "NONE"] ;
     [_veh, _spawnpos] spawn spawn_protection ;
     _veh addEventHandler["GetIn", {_this call event_getin}] ;
+    _veh addEventHandler["killed", {_this call vehicle_destruction_manager}];
     [_veh, _l] call h_assignToLocation ;
 
     createVehicleCrew _veh ;
-    // Add killed handler and variables
     {
       [_x, _l] call h_assignToLocation ;
       _all_units pushBack _x ;
