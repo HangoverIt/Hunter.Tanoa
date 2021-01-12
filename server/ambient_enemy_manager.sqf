@@ -29,6 +29,8 @@ while {true} do {
     if (_overWater) then {
       // Water
       _o = createVehicle [_sea_classes select (floor random count _sea_classes), _trypos, [], 0, "NONE"];
+      _o addEventHandler["GetIn", {_this call event_getin}] ;
+      _o addEventHandler["killed", {_this call vehicle_destruction_manager}];
       [_o] call h_setManagedVehicle ;
       createVehicleCrew _o ;
       _o setDir (random 360) ;
