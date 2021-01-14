@@ -82,6 +82,7 @@ if (_trypos isEqualTo [0,0,0]) then {
 _v = createVehicle [_vehclass, _trypos, [], 0, _veh_additional];
 if (_airlift) then {[_v, _trypos] spawn spawn_protection ;};
 _v addEventHandler["GetIn", {_this call event_getin}] ;
+_v addEventHandler["killed", {_this call vehicle_destruction_manager}];
 _v call h_setManagedVehicle ;
 createVehicleCrew _v ;
 
