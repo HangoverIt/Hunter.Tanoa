@@ -81,9 +81,9 @@ while{true} do {
   }forEach _markercache ;
   _markercache = [] ;
   
-  _cas_hm = _cas_null ;
-  // Update markers
+  _cas_hm = _cas_null ; // heat map entry for cas strike
   {
+    // Update markers
     _hm_time = _x select 0;
     _hm_hits = _x select 1 ;
     _hm_loc = _x select 2 ;

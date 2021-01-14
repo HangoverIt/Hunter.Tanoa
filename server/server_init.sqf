@@ -48,6 +48,13 @@ cleanup_manager = compileFinal preprocessFileLineNumbers "server\cleanup_manager
 build_base = compileFinal preprocessFileLineNumbers "server\build_base.sqf" ;
 reset_game_save = compileFinal preprocessFileLineNumbers "server\reset_game_save.sqf" ;
 
+// Missions
+end_mission = compileFinal preprocessFileLineNumbers "missions\functions\end_mission.sqf" ;
+generate_mission_location = compileFinal preprocessFileLineNumbers "missions\functions\generate_mission_location.sqf" ;
+get_location_nice_position = compileFinal preprocessFileLineNumbers "missions\functions\get_location_nice_position.sqf" ;
+isMissionActive = compileFinal preprocessFileLineNumbers "missions\functions\isMissionActive.sqf" ;
+start_mission = compileFinal preprocessFileLineNumbers "missions\functions\start_mission.sqf" ;
+
 [] call compileFinal preprocessFileLineNumbers "server\load_savegame.sqf";
 [] call compileFinal preprocessFileLineNumbers "server\manage_players.sqf";
 [] call compileFinal preprocessFileLineNumbers "server\define_sectors.sqf";
