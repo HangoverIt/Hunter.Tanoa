@@ -10,7 +10,8 @@ if (isNil "HunterMissions") then {
                      [
                        [0, "Secure the weapon cache", [_alpha_pos, [100,2000], [[["optic_DMS", 1], ["muzzle_snds_H", 1], ["FirstAidKit", 5]], [["launch_RPG32_F", 2], ["srifle_DMR_01_DMS_F", 1]], [["RPG32_F", 3], ["RPG32_HE_F", 6], ["10Rnd_762x54_Mag", 3]]]], "missions\cache.sqf", false, false],
                        [1, "Recover another weapon cache", [_alpha_pos, [100,2000], [[["optic_DMS", 1], ["muzzle_snds_H", 1], ["FirstAidKit", 5]], [["launch_RPG32_F", 2], ["srifle_DMR_01_DMS_F", 1]], [["RPG32_F", 3], ["RPG32_HE_F", 6], ["10Rnd_762x54_Mag", 3]]]], "missions\cache.sqf", false, false],
-                       [2, "Kill the officer", [_alpha_pos, [100,2000], "O_G_officer_F"], "missions\assassination.sqf", false, true]
+                       [2, "Kill the officer", [_alpha_pos, [100,2000], "O_G_officer_F"], "missions\assassination.sqf", false, true],
+                       [3, "Get the intel", [_alpha_pos, [100,2000]], "missions\intel.sqf", false, true]
                      ],
                      [
                        [10, "Enemy weapon cache", [15, 20, [[["optic_DMS", 1], ["muzzle_snds_H", 1], ["FirstAidKit", 5]], [["launch_RPG32_F", 2], ["srifle_DMR_01_DMS_F", 1]], [["RPG32_F", 3], ["RPG32_HE_F", 6], ["10Rnd_762x54_Mag", 3]]]], "missions\cache.sqf", false, false],
