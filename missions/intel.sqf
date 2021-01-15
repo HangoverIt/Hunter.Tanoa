@@ -12,15 +12,15 @@ _intel = createVehicle["Intel_File1_F", [0,0,0], [], 0, "NONE"];
 _intelpos = [_location, _intel, true] call get_location_nice_position ;
 _intel setPos _intelpos ;
 
-private _intelfound = false ;
+removeAllActions _intel;
+
 private _fn_intel = {
   params ["_target", "_caller", "_actionId", "_arguments"];
   _caller switchMove "AmovPercMstpSrasWrflDnon_AinvPknlMstpSlayWrflDnon";
   sleep 1;
   deleteVehicle _target ;
-  _intelfound = true;
 };
-_intel addAction ["Fetch Intel", _fn_intel, nil, 1.5, false, false, "", "true", 10, false, "", ""] ;
+_intel addAction ["Fetch Intel", _fn_intel, nil, 1.5, true, true, "", "true", 10, false, "", ""] ;
 
 private _huntermission = [_id, _title, _intelpos, _description] call start_mission;
 
@@ -30,7 +30,7 @@ while {([_huntermission] call isMissionActive)} do {
   sleep 2 ;
  
   // Check victory condition
-  if (_intelfound) exitWith {
+  if (isNull _intel) exitWith {
     [_this, _huntermission] call end_mission ;
   };
 };
