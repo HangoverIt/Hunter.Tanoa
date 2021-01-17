@@ -1,7 +1,17 @@
-params["_id", "_title", "_pos", "_description"];
+params["_id", "_title", "_expiry", "_pos", "_description", ["_icon", ""]];
+
+// Expiry is in minutes
+private _now = dateToNumber date ;
+private _min = ((1/365)/24)/60 ;
+private _mission_end_time = (_expiry * _min) + _now;
 
 private _taskid = format["task%1", _id] ;
-[true, _taskid, [_description, _title, format["huntermission%1", _id]], _pos, true, -1, true, "", false] call BIS_fnc_taskCreate ;
+private _enddate = numberToDate [2008, _mission_end_time] ;
+_description = _description + format[". Expires at %1:%2", _enddate select 3, _enddate select 4] ;
+[true, _taskid, [_description, _title, format["huntermission%1", _id]], _pos, "AUTOASSIGNED", -1, true, _icon, false] call BIS_fnc_taskCreate ;
 
 // Handle for mission
-[true, _description, _taskid];
+[true, _description, _taskid, _mission_end_time];
+
+
+//[bin\config.bin/CfgTaskTypes/Default,bin\config.bin/CfgTaskTypes/armor,bin\config.bin/CfgTaskTypes/attack,bin\config.bin/CfgTaskTypes/backpack,bin\config.bin/CfgTaskTypes/boat,bin\config.bin/CfgTaskTypes/box,bin\config.bin/CfgTaskTypes/car,bin\config.bin/CfgTaskTypes/container,bin\config.bin/CfgTaskTypes/danger,bin\config.bin/CfgTaskTypes/defend,bin\config.bin/CfgTaskTypes/destroy,bin\config.bin/CfgTaskTypes/documents,bin\config.bin/CfgTaskTypes/download,bin\config.bin/CfgTaskTypes/exit,bin\config.bin/CfgTaskTypes/getin,bin\config.bin/CfgTaskTypes/getout,bin\config.bin/CfgTaskTypes/heal,bin\config.bin/CfgTaskTypes/heli,bin\config.bin/CfgTaskTypes/help,bin\config.bin/CfgTaskTypes/intel,bin\config.bin/CfgTaskTypes/interact,bin\config.bin/CfgTaskTypes/kill,bin\config.bin/CfgTaskTypes/land,bin\config.bin/CfgTaskTypes/listen,bin\config.bin/CfgTaskTypes/map,bin\config.bin/CfgTaskTypes/meet,bin\config.bin/CfgTaskTypes/mine,bin\config.bin/CfgTaskTypes/move,bin\config.bin/CfgTaskTypes/move1,bin\config.bin/CfgTaskTypes/move2,bin\config.bin/CfgTaskTypes/move3,bin\config.bin/CfgTaskTypes/move4,bin\config.bin/CfgTaskTypes/move5,bin\config.bin/CfgTaskTypes/navigate,bin\config.bin/CfgTaskTypes/plane,bin\config.bin/CfgTaskTypes/radio,bin\config.bin/CfgTaskTypes/rearm,bin\config.bin/CfgTaskTypes/refuel,bin\config.bin/CfgTaskTypes/repair,bin\config.bin/CfgTaskTypes/rifle,bin\config.bin/CfgTaskTypes/run,bin\config.bin/CfgTaskTypes/scout,bin\config.bin/CfgTaskTypes/search,bin\config.bin/CfgTaskTypes/takeoff,bin\config.bin/CfgTaskTypes/talk,bin\config.bin/CfgTaskTypes/talk1,bin\config.bin/CfgTaskTypes/talk2,bin\config.bin/CfgTaskTypes/talk3,bin\config.bin/CfgTaskTypes/talk4,bin\config.bin/CfgTaskTypes/talk5,bin\config.bin/CfgTaskTypes/target,bin\config.bin/CfgTaskTypes/truck,bin\config.bin/CfgTaskTypes/unknown,bin\config.bin/CfgTaskTypes/upload,bin\config.bin/CfgTaskTypes/use,bin\config.bin/CfgTaskTypes/wait,bin\config.bin/CfgTaskTypes/walk,bin\config.bin/CfgTaskTypes/whiteboard,bin\config.bin/CfgTaskTypes/A,bin\config.bin/CfgTaskTypes/B,bin\config.bin/CfgTaskTypes/C,bin\config.bin/CfgTaskTypes/D,bin\config.bin/CfgTaskTypes/E,bin\config.bin/CfgTaskTypes/F,bin\config.bin/CfgTaskTypes/G,bin\config.bin/CfgTaskTypes/H,bin\config.bin/CfgTaskTypes/I,bin\config.bin/CfgTaskTypes/J,bin\config.bin/CfgTaskTypes/K,bin\config.bin/CfgTaskTypes/L,bin\config.bin/CfgTaskTypes/M,bin\config.bin/CfgTaskTypes/N,bin\config.bin/CfgTaskTypes/O,bin\config.bin/CfgTaskTypes/P,bin\config.bin/CfgTaskTypes/Q,bin\config.bin/CfgTaskTypes/R,bin\config.bin/CfgTaskTypes/S,bin\config.bin/CfgTaskTypes/T,bin\config.bin/CfgTaskTypes/U,bin\config.bin/CfgTaskTypes/V,bin\config.bin/CfgTaskTypes/W,bin\config.bin/CfgTaskTypes/X,bin\config.bin/CfgTaskTypes/Y,bin\config.bin/CfgTaskTypes/Z,bin\config.bin/CfgTaskTypes/airdrop]
