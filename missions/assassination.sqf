@@ -1,89 +1,39 @@
-params["_id", "_title", "_extraparams"] ;
+params["_id", "_description", "_expiry", "_icon", "_extraparams"] ;
 _extraparams params ["_minthreat", "_maxthreat", "_type"] ;
 
-private _active = true ;
-
 // Setup mission --------------------------------------------
-private _description = "Assassinate the target" ;
-private _taskid = format["task%1", _id] ;
+private _title = "Assassinate the target" ;
 
-private _players = call BIS_fnc_listPlayers ;
-  
-_filteredlocations = [] ;
-if (typeName _minthreat == "ARRAY" && typeName _maxthreat == "ARRAY") then {
-  // Input is an array, assume location has been provided instead of threat
-  _location = _minthreat ;
-  _radius_min = _maxthreat select 0 ;
-  _radius_max = _maxthreat select 1 ;
- 
-  {
-    _locationpos = _x select 2;
-    _dis = _locationpos distance _location;
-    if (_dis >= _radius_min && _dis <= _radius_max) then {
-      _filteredlocations pushBack _x ;
-    };
-  }forEach HunterLocations ;
-  
-}else{
-  // Get a random location within min and max threat
-  {
-    _sector = _x select 4 ;
-    _locationpos = _x select 2;
-    _threat = [_sector] call h_getSectorBaseThreat ;
-    _awayfromplayers = true ;
-    if (_threat >= _minthreat && _threat <= _maxthreat) then {
-      {
-        if (_x distance _locationpos <= 500) then {
-          _awayfromplayers = false ;
-        };
-      }forEach _players ;
-      if (_awayfromplayers) then {
-          _filteredlocations pushBack _x ;
-      };
-    }; 
-  }forEach HunterLocations ;
-};
-
-// Fallback to all locations
-if (count _filteredlocations == 0) then {
-  _filteredlocations = HunterLocations ;
-};
-
-private _location = _filteredlocations select (floor random count _filteredlocations) ;
-_pos = _location select 2 ;
-
-_trypos = _pos getPos [random 25, random 360] ;
-private _giveup = 50 ;
-// If over water then try another location until giving up
-while {!(_trypos isFlatEmpty  [-1, -1, -1, -1, 2, false] isEqualTo []) && _giveup > 0} do {
-  _trypos = _pos getPos [random 25, random 360] ;
-  _giveup = _giveup - 1; 
-};
+private _location = _extraparams call generate_mission_location ;
 
 if (_type == "") then { _type = "O_T_Officer_F";};
 _grp = createGroup east ;
-private _target = _grp createUnit[_type, _trypos, [], 10, "NONE"] ;
+private _target = _grp createUnit[_type, [0,0,0], [], 10, "NONE"] ;
 _target addEventHandler["Killed", {_this call kill_manager}];
-private _veh = createVehicle ["C_SUV_01_F", _trypos, [], 20, "NONE"];
-[_veh] call spawn_protection ;
+private _veh = createVehicle ["C_SUV_01_F", [0,0,0], [], 20, "NONE"];
 [_veh] call h_setMissionVehicle ;
 
-[true, _taskid, [_description, _title, format["missonassassin%1", _id]], _pos, true, -1, true, "", false] call BIS_fnc_taskCreate ;
+// Move to better locations
+_missionpos = [_location, _target] call get_location_nice_position ;
+_target setPos _missionpos ;
+_vehpos = [_location, _veh] call get_location_nice_position ;
+_veh setPos _vehpos ;
+[_veh, _vehpos] call spawn_protection ;
+
+private _huntermission = [_id, _title, _expiry, _missionpos, _description] call start_mission;
 
 // Check connected roads and go as far away as possible
-_escape_loc = [_trypos] call h_max_connected_road ;
+_escape_loc = [_missionpos] call h_max_connected_road ;
 
 // Monitor mission --------------------------------------------
 
 private _targetflee = false ;
 private _targetfleeing = false ;
 private _escapeinvehicle = objNull ;
-while {_active} do {
+while {([_huntermission] call isMissionActive)} do {
   sleep 2 ;
   
   if (_targetflee) then {
-  
-    [_taskid, _target] call BIS_fnc_taskSetDestination ;
     
     if (isNull _escapeinvehicle || !(alive _escapeinvehicle)) then {
       // Escape vehicle not an option, find another
@@ -115,6 +65,7 @@ while {_active} do {
       diag_log format ["Assassination - checking vehicle %1 for driver. value = %2", _x, driver _x];
       if (isNull (driver _x)) exitWith {
         _targetflee = true ;
+        [_huntermission, _target] call setMissionLocation ;
         _target disableAI "AUTOTARGET" ;
         _target disableAI "TARGET" ;
         if (!isNull _enemy) then {_grp forgetTarget _enemy ;};
@@ -126,29 +77,23 @@ while {_active} do {
   };
   
   _players = call BIS_fnc_listPlayers ;
-  // Check failure condition, has target escaped?
+  // Check failure condition, has target escaped or mission timed out?
   _outofrange = {_x distance _target < 600} count _players ;
-  if (_outofrange == 0 && _targetflee) exitWith {
+  if ((_outofrange == 0 && _targetflee) || ([_huntermission] call hasMissionExpired)) exitWith {
     // mission failed
-    [_taskid, "FAILED"] call BIS_fnc_taskSetState;
     [_veh] call h_unsetMissionVehicle ;
-    sleep 5 ;
-    [_taskid] call BIS_fnc_deleteTask;
-    _active = false ;
+    [_this, _huntermission, false] call end_mission ;
+
+    [_grp] spawn cleanup_manager; // clean-up unit when out of player range
+
   };
-  
   
   // Check victory condition
   if (!alive _target) exitWith {
-    _active = false ;
+    [_this, _huntermission] call end_mission ;
     
-    // Mission success, advance to next mission
-    [_taskid, "SUCCEEDED"] call BIS_fnc_taskSetState;
     [_veh] call h_unsetMissionVehicle ;
-    _this set [4, true] ; // Flag completed
   };
- 
- 
 };
 
 // Mission end --------------------------------------------

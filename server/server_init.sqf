@@ -53,6 +53,8 @@ end_mission = compileFinal preprocessFileLineNumbers "missions\functions\end_mis
 generate_mission_location = compileFinal preprocessFileLineNumbers "missions\functions\generate_mission_location.sqf" ;
 get_location_nice_position = compileFinal preprocessFileLineNumbers "missions\functions\get_location_nice_position.sqf" ;
 isMissionActive = compileFinal preprocessFileLineNumbers "missions\functions\isMissionActive.sqf" ;
+hasMissionExpired = compileFinal preprocessFileLineNumbers "missions\functions\hasMissionExpired.sqf" ;
+setMissionLocation = compileFinal preprocessFileLineNumbers "missions\functions\setMissionLocation.sqf" ;
 start_mission = compileFinal preprocessFileLineNumbers "missions\functions\start_mission.sqf" ;
 
 [] call compileFinal preprocessFileLineNumbers "server\load_savegame.sqf";
