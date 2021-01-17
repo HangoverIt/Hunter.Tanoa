@@ -28,10 +28,7 @@ while {true} do {
     private _o = objNull;
     if (_overWater) then {
       // Water
-      _o = createVehicle [_sea_classes select (floor random count _sea_classes), _trypos, [], 0, "NONE"];
-      _o addEventHandler["GetIn", {_this call event_getin}] ;
-      _o addEventHandler["killed", {_this call vehicle_destruction_manager}];
-      [_o] call h_setManagedVehicle ;
+      _o = [_trypos, _sea_classes select (floor random count _sea_classes)] call h_createVehicle ;
       createVehicleCrew _o ;
       _o setDir (random 360) ;
       _grp = group (leader _o);
@@ -58,8 +55,8 @@ while {true} do {
         // Select a road object and spawn there
         _trypos = getPos (_roads select 0) ;
       
-        _o = createVehicle [_land_classes select (floor random count _land_classes), _trypos, [], 0, "NONE"];
-        [_o] call h_setManagedVehicle ;
+        _o = [_trypos, _land_classes select (floor random count _land_classes)] call h_createVehicle ;
+
         createVehicleCrew _o ;
         _o setDir (random 360) ;
         _grp = group (leader _o);

@@ -25,6 +25,7 @@ h_roadCallback = compileFinal preprocessFileLineNumbers "functions\h_roadCallbac
 h_posOnLand = compileFinal preprocessFileLineNumbers "functions\h_posOnLand.sqf" ;
 h_locationSupplyPos = compileFinal preprocessFileLineNumbers "functions\h_locationSupplyPos.sqf" ;
 h_createUnit = compileFinal preprocessFileLineNumbers "functions\h_createUnit.sqf" ;
+h_createVehicle = compileFinal preprocessFileLineNumbers "functions\h_createVehicle.sqf" ;
 h_assignToLocation = compileFinal preprocessFileLineNumbers "functions\h_assignToLocation.sqf" ;
 
 //event_capture = compileFinal preprocessFileLineNumbers "server\event_capture.sqf";

@@ -79,11 +79,9 @@ if (_trypos isEqualTo [0,0,0]) then {
   _trypos set [2, 150] ;
 };
 
-_v = createVehicle [_vehclass, _trypos, [], 0, _veh_additional];
-if (_airlift) then {[_v, _trypos] spawn spawn_protection ;};
-_v addEventHandler["GetIn", {_this call event_getin}] ;
-_v addEventHandler["killed", {_this call vehicle_destruction_manager}];
-_v call h_setManagedVehicle ;
+_v = [_trypos, _vehclass, [], _veh_additional, false] call h_createVehicle ;
+if (!_airlift) then {[_v, _trypos] spawn spawn_protection ;};
+
 createVehicleCrew _v ;
 
 // Calculate the number to resupply
@@ -104,17 +102,17 @@ private _grp = group (leader _v);
 private _cargogrp = createGroup east ; // New group to the crew
 private _respawn_counter = _respawn_size;
 while {_respawn_counter > 0} do {
-  _unit = [_grp, _trypos, HUNTER_THREAT_MAPPING_SOLDIER, _l] call h_createUnit ;
+  _unit = [_cargogrp, _trypos, HUNTER_THREAT_MAPPING_SOLDIER, _l] call h_createUnit ;
   _unit assignAsCargo _v ;
   _unit moveInCargo _v ;
   
   _respawn_counter = _respawn_counter - 1;
 } ;
 
-// Add kill handler for resupply units
+// Add kill handler for resupply unit crew
 {
   _x addEventHandler["Killed", {_this call kill_manager}];
-}forEach (units _grp) + (units _cargogrp) ;
+}forEach (units _grp) ;
 
 diag_log format["createLocationSupply: Spawned resupply vehicle %2, with %3 soldiers, going to %4", time, _vehclass, count units _cargogrp + count units _grp, _l_name] ;
 
@@ -158,15 +156,15 @@ if (_timeout <= 0) exitWith {
 
 // Reached destination location or all units are dead
 _alive_resupply = { alive _x } count ((units _grp) + (units _cargogrp)) ;
-if (_airlift) then {
-  _alive_resupply = { alive _x } count (units _grp) ;
-};
 
 if (_alive_resupply > 0 && _timeout > 0) then {
+  if (_airlift) then {
+    // Only count the group in cargo
+    _alive_resupply = { alive _x } count (units _cargogrp) ;
+  };
   _l_active = (_l select 9) ;
   _l_percent = (_l select 5) ;
   
-  _helipad = objNull ;
   if (_airlift) then {
     diag_log format ["createLocationSupply: air supply arriving, landing helicoptor at %1", _l_name] ;
     sleep 2 ;

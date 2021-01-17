@@ -29,7 +29,7 @@ _airclass = "O_Plane_CAS_02_F";
 // Edge of map spawn
 private _spawn_at = [0,15000,200] ;
 
-private _airstrike = createVehicle[_airclass, _spawn_at, [], 0, "FLY"] ;
+private _airstrike = [_spawn_at, _airclass, [], "FLY"] call h_createVehicle ;
 createVehicleCrew _airstrike;
 _grp = group (leader _airstrike);
 

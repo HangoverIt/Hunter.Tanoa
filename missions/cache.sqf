@@ -7,11 +7,10 @@ private _title = "Secure cache" ;
 
 private _location = _extraparams call generate_mission_location ;
 
-private _veh = createVehicle ["O_Truck_02_covered_F", [0,0,0], [], 0, "NONE"];
+private _veh = [[0,0,0], "O_Truck_02_covered_F", [], "NONE", false] call h_createVehicle ;
 _missionpos = [_location, _veh] call get_location_nice_position ;
 _veh setPos _missionpos ;
 [_veh, _missionpos] call spawn_protection ;
-[_veh] call h_setManagedVehicle ;
 
 clearItemCargoGlobal _veh;
 clearWeaponCargoGlobal _veh;
