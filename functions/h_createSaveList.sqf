@@ -22,7 +22,6 @@ private _savelist = [] ;
 
   if ((isNil "_vehpos") &&
       !([_x] call h_isManagedVehicle) &&
-      !([_x] call h_isMissionVehicle) &&
       (alive _x) &&
       ( speed _x < 5 ) &&
       ( isNull  attachedTo _x ) &&

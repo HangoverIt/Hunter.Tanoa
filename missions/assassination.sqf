@@ -11,7 +11,7 @@ _grp = createGroup east ;
 private _target = _grp createUnit[_type, [0,0,0], [], 10, "NONE"] ;
 _target addEventHandler["Killed", {_this call kill_manager}];
 private _veh = createVehicle ["C_SUV_01_F", [0,0,0], [], 20, "NONE"];
-[_veh] call h_setMissionVehicle ;
+[_veh] call h_setManagedVehicle ; // Vehicle is server owned
 
 // Move to better locations
 _missionpos = [_location, _target] call get_location_nice_position ;
@@ -20,7 +20,8 @@ _vehpos = [_location, _veh] call get_location_nice_position ;
 _veh setPos _vehpos ;
 [_veh, _vehpos] call spawn_protection ;
 
-private _huntermission = [_id, _title, _expiry, _missionpos, _description] call start_mission;
+if (_icon == "") then {_icon = "kill";};
+private _huntermission = [_id, _title, _expiry, _missionpos, _description, _icon] call start_mission;
 
 // Check connected roads and go as far away as possible
 _escape_loc = [_missionpos] call h_max_connected_road ;
@@ -81,10 +82,10 @@ while {([_huntermission] call isMissionActive)} do {
   _outofrange = {_x distance _target < 600} count _players ;
   if ((_outofrange == 0 && _targetflee) || ([_huntermission] call hasMissionExpired)) exitWith {
     // mission failed
-    [_veh] call h_unsetMissionVehicle ;
     [_this, _huntermission, false] call end_mission ;
 
-    [_grp] spawn cleanup_manager; // clean-up unit when out of player range
+    [_veh] spawn cleanup_manager ; // remove vehicle when out of view if still managed
+    [_grp] spawn cleanup_manager; // clean-up units when out of player range
 
   };
   
@@ -92,7 +93,8 @@ while {([_huntermission] call isMissionActive)} do {
   if (!alive _target) exitWith {
     [_this, _huntermission] call end_mission ;
     
-    [_veh] call h_unsetMissionVehicle ;
+    [_veh] spawn cleanup_manager ; // remove vehicle when out of view if still managed
+    [_grp] spawn cleanup_manager; // clean-up units when out of player range
   };
 };
 

@@ -11,7 +11,7 @@ private _veh = createVehicle ["O_Truck_02_covered_F", [0,0,0], [], 0, "NONE"];
 _missionpos = [_location, _veh] call get_location_nice_position ;
 _veh setPos _missionpos ;
 [_veh, _missionpos] call spawn_protection ;
-[_veh] call h_setMissionVehicle ;
+[_veh] call h_setManagedVehicle ;
 
 clearItemCargoGlobal _veh;
 clearWeaponCargoGlobal _veh;
@@ -27,13 +27,15 @@ clearMagazineCargoGlobal _veh;
   _veh addMagazineCargoGlobal _x ;
 }forEach (_cache select 2) ;
 
-private _huntermission = [_id, _title, _expiry, _missionpos, _description] call start_mission;
+if (_icon == "") then {_icon = "container";};
+private _huntermission = [_id, _title, _expiry, _missionpos, _description, _icon] call start_mission;
 
 // Monitor mission --------------------------------------------
 while {([_huntermission] call isMissionActive)} do {
   sleep 2 ;
   if (!alive _veh || ([_huntermission] call hasMissionExpired)) then {
     // mission failed
+    [_veh] spawn cleanup_manager ; 
     [_this, _huntermission, false] call end_mission ;
   };
   
@@ -45,8 +47,8 @@ while {([_huntermission] call isMissionActive)} do {
     if (_x distance _veh < 5) exitWith {
       // Mission success, advance to next mission
       [_this, _huntermission] call end_mission ;
-      
-      [_veh] call h_unsetMissionVehicle ;
+
+      [_veh] spawn cleanup_manager ; 
     };
   }forEach _players ;  
 };
