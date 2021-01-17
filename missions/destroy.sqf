@@ -8,10 +8,9 @@ private _location = _extraparams call generate_mission_location ;
 
 if (_type == "") then { _type = "Land_ReservoirTank_V1_F";};
 
-private _target = createVehicle [_type, [0,0,0], [], 0, "NONE"];
+private _target = [[0,0,0], _type, [], "NONE", false] call h_createVehicle ;
 _missionpos = [_location, _target] call get_location_nice_position ;
 _target setPos _missionpos;
-[_target] call h_setManagedVehicle ; // server managed
 
 private _sector = _location select 4;
 private _threat = [_sector] call h_getSectorThreat ;

@@ -60,10 +60,7 @@ if (_overWater) then {
 
 // Create the vehicle, crew and passengers
 _grp = createGroup east ;
-private _vehicle = createVehicle[_vehicleclass, _trypos, [], 0, "NONE"] ;
-_vehicle addEventHandler["GetIn", {_this call event_getin}] ;
-_vehicle addEventHandler["killed", {_this call vehicle_destruction_manager}];
-_vehicle call h_setManagedVehicle ;
+private _vehicle = [_trypos, _vehicleclass] call h_createVehicle ;
 createVehicleCrew _vehicle;
 _grpv = group _vehicle ;
 // Add killed handler and variables

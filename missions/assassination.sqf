@@ -10,15 +10,14 @@ if (_type == "") then { _type = "O_T_Officer_F";};
 _grp = createGroup east ;
 private _target = _grp createUnit[_type, [0,0,0], [], 10, "NONE"] ;
 _target addEventHandler["Killed", {_this call kill_manager}];
-private _veh = createVehicle ["C_SUV_01_F", [0,0,0], [], 20, "NONE"];
-[_veh] call h_setManagedVehicle ; // Vehicle is server owned
+private _veh = [[0,0,0], "C_SUV_01_F", [], "NONE", false] call h_createVehicle ;
 
 // Move to better locations
 _missionpos = [_location, _target] call get_location_nice_position ;
 _target setPos _missionpos ;
 _vehpos = [_location, _veh] call get_location_nice_position ;
 _veh setPos _vehpos ;
-[_veh, _vehpos] call spawn_protection ;
+[_veh] spawn spawn_protection; 
 
 if (_icon == "") then {_icon = "kill";};
 private _huntermission = [_id, _title, _expiry, _missionpos, _description, _icon] call start_mission;
