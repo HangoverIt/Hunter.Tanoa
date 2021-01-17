@@ -51,7 +51,7 @@ deleteMarker ("trg" + _l_name);
   {
     _veh = _x ;
     {_veh deleteVehicleCrew _x } forEach crew _veh;
-    if (side _veh in [west, civilian] && !([_veh] call h_isMissionVehicle) && !([_veh] call h_isManagedVehicle)) then {
+    if (side _veh in [west, civilian] && !([_veh] call h_isManagedVehicle)) then {
       deleteVehicle _veh ;
     };
   }forEach (_l_pos nearObjects [_x, _max_size ]);
