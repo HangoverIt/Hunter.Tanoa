@@ -44,7 +44,7 @@ if (!_loadedplayer) then {
       };
     };
   } forEach HunterPlayers;
-  publicVariable "HunterPlayers";
+  
 };
 
 // Allow multi roles for players
