@@ -32,8 +32,9 @@ HUNTER_SAD_TIMEOUT = 15 ; // minutes
 HUNTER_CAS_TIMEOUT = 10 ; // minutes
 HUNTER_HEATMAP_AGE = 30 ; // minutes
 HUNTER_HEAT_THRESHOLD = 5; // number of kills to trigger CAS response
-HUNTER_CASH_REWARD_SOLDIER = 10; // $ reward
-HUNTER_CASH_REWARD_VEHICLE = 100; // $ reward
+//HUNTER_CASH_REWARD_SOLDIER = 10; // $ reward
+//HUNTER_CASH_REWARD_VEHICLE = 100; // $ reward
+HUNTER_CASH_REWARDS = [["Man", 10], ["Car", 1000],["Air", 10000]];
 HUNTER_SPAWN_LOCATIONS = [
                          ["NameCity",20], 
                          ["NameCityCapital", 30], 
