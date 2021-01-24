@@ -28,6 +28,8 @@ h_createUnit = compileFinal preprocessFileLineNumbers "functions\h_createUnit.sq
 h_createVehicle = compileFinal preprocessFileLineNumbers "functions\h_createVehicle.sqf" ;
 h_assignToLocation = compileFinal preprocessFileLineNumbers "functions\h_assignToLocation.sqf" ;
 
+h_getRewardForType = compileFinal preprocessFileLineNumbers "functions\h_getRewardForType.sqf";
+
 //event_capture = compileFinal preprocessFileLineNumbers "server\event_capture.sqf";
 event_getin = compileFinal preprocessFileLineNumbers "server\event_getin.sqf";
 trigger_spawn_location = compileFinal preprocessFileLineNumbers "server\trigger_spawn_location.sqf";

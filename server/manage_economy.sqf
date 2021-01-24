@@ -5,4 +5,7 @@ enemyfuel = 0;
 // Data structure for the economy
 HunterEconomy = [playercash, enemyfuel];
 
+//diag_log format ["rewards array %1", HUNTER_CASH_REWARDS];
+
+
 publicVariable "HunterEconomy" ;
