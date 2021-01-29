@@ -3,8 +3,11 @@ This covers all of the game files and how they are all called and depend on each
 The game files start from the Arma 3 framework which isn't covered here but can be seen in the Bohimia docs:
 - [Initialisation Order](https://community.bistudio.com/wiki/Initialization_Order)  
 - [Event Scripts](https://community.bistudio.com/wiki/Event_Scripts)  
+  
+Some useful information on the scheduler in Arma  
+https://community.bistudio.com/wiki/Scheduler
 
-## Code 
+## Framework Code
 ### Overview
 Attempt to show this within markdown (can migrate to image if required).  
 
@@ -39,6 +42,11 @@ Game Engine
     -- server\location_manager.sqf
       |
       -- createLocationSupply.sqf
+      -- trigger_despawn_location.sqf
+      -- trigger_spawn_location.sqf
+        |
+        -- spawn_location.sqf
+       
     -- server\manage_missions.sqf
     -- server\save_manager.sqf
     -- server\ambient_enemy_manager.sqf
@@ -56,7 +64,7 @@ Game Engine
 **Called by the game engine in multiplayer and singleplayer game modes.**  
 Always called when player first enters the game so this file covers many of the player setup.  
   
-Players equipment is restored with [setUnitLoadout]() from either the PlayerDeathGear or from restored inventory from saved game (pushed over network to clients from server).  
+Players equipment is restored with [setUnitLoadout](https://community.bistudio.com/wiki/setUnitLoadout) from either the PlayerDeathGear or from restored inventory from saved game (pushed over network to clients from server).  
 HunterPlayers is only used to load the default gear from the server and doesn't need maintaining by the client.  
 HunterPlayers global variable is iterated and the variable hunt1 .. hunt8 (these must be set in the mission.sqm with each playable unit having one of these variable names) is checked to see if this is the player. Once a match is found then the appropriate player gear is loaded. This means that equipment is persisted against the game slots. If a player chooses a different slot in the next game they play then they will be equipped with that slots loadout.  
   
@@ -124,7 +132,7 @@ Save file contents (in the order they are saved)
 - Game date & time (restore the game time)
 - Heat map (saved information on player activity)
 
-The game date is loaded and pushed to all connected clients with [remoteExec]().  
+The game date is loaded and pushed to all connected clients with [remoteExec](https://community.bistudio.com/wiki/remoteExec).  
 Game bases are built with a call to build_base.sqf, this can load multiple bases.  
 
 Adds the following actions
@@ -209,11 +217,11 @@ Defines the following globals
 ### roads.sqf
 This is a config file containing road network information. This is a list of lists, where each list is a network. Within each network there are defined locations.  
 The format is
-'''
+```
 [[network1], [network2], ...]
 network: [location name, location position]
-'''
-Location names are saved as byte arrays to allow UTF8 strings. These are converted back by [toString]() and compared with existing locations.  
+```
+Location names are saved as byte arrays to allow UTF8 strings. These are converted back by [toString](https://community.bistudio.com/wiki/toString) and compared with existing locations.  
 HunterNetwork contains references to HunterLocations after the procedure has completed.  
   
 A roads.sqf file contents can be created by running utility\define_road_connections.sqf. This procedure is not called within game and is a tool to create the mapping due to slow execution of the road walk algorithm.
@@ -280,17 +288,55 @@ Create a supply vehicle with required number of soldiers to resupply the locatio
 Requires global variables
 - HunterLocations
 - HunterNetwork
+
+### trigger_despawn_location.sqf
+**Parameters:** trigger  
+**Inputs:**
+- **trigger:** game trigger created by location_manager
   
+Trigger response created when all western units leave.  
+Waits until the **Spawned** flag is set to true (ensuring spawn_location has finished).  
+The trigger object has the location set as a variable. This is extracted from the trigger.  
+Flags a location as inactive. Removes all spawned units and vehicles. Resets the trigger area.  
+This will remove all vehicles in the location area apart from any vehicles flagged as **Managed**.
+
+### trigger_spawn_location.sqf
+**Parameters:** trigger  
+**Inputs:**
+- **trigger:** game trigger created by location_manager
+  
+Created from the location_manager, this is a trigger event for any western units who enter the area.  
+Due to the amount of work required to fully spawn a location, this code only does a small amount of work to increase the spawn area, preventing unwanted spawn/respawn triggering when units border the area. 
+This code sets a **Spawned** flag on the trigger to false and then [spawn](https://community.bistudio.com/wiki/spawn) the spawn_location code to do the work. This prevents the game running code in an unscheduled environment and hanging the game (see [Scheduler](https://community.bistudio.com/wiki/Scheduler)).  
+The spawn_location code will set the **Spawned** flag when all units are finished creating. 
+
+### spawn_location.sqf
+**Parameters:** trigger  
+**Inputs:**
+- **trigger:** game trigger created by location_manager
+  
+Called from trigger_spawn_location, this procedure creates all location units and vehicles according to values defined in the location variable. 
+A location saves any vehicles and these are recreated by h_restoreSaveList so they appear in the same positions left by the player. 
+All buildings are searched for in the area around the location and building positions are obtained from [BIS_fnc_buildingPositions](https://community.bistudio.com/wiki/BIS_fnc_buildingPositions). 
+Units are spawned according the the percent remaining and type of location being spawned. A call to h_locationSpawnSize returns the number of units required. 
+A random choice is made to then create
+- Vehicles with units
+- Units in buildings
+- Units on patrol
+
+If all building locations are occupied then units are created on patrol.  
+When all units are spawned they are saved to the location (for despawning later) and the **Spawned** flag is set to true allowing any despawn to now occur. 
+
 ### manage_missions.sqf
 **Parameters:** (None)  
 **Persistent code - executes for lifetime of server.**  
   
 Create and manage missions in the game. All missions are defined with an array of arrays. Each embedded array is a stage of missions that once the mandatory missions are complete will move to the next set.  
-'''
+```
 missions = [[mission_group], ...]
 mission_group = [[mission1], [mission2], ...]
 mission = [id, description, parameters, script, completed, mandatory]
-'''
+```
   
 ID defines a unique number for active missions.  
 Description appears against the task details.  
@@ -344,8 +390,15 @@ Creates civilians at distance from a random player. Spawns on land
 **Parameters:** (None)  
 **Persistent code - executes for lifetime of server.**  
   
-Defines the HunterHeatMap from player kills. Uses ghe HunterKillList from the kill_manager.sqf for every killed enemy unit.  
-Creates search and destroy, close air support and spotter squads. The CAS is spwaned using [BIS_fnc_moduleCAS]().   
+Defines the HunterHeatMap from player kills. Uses the HunterKillList from the kill_manager.sqf for every killed enemy unit.  
+Creates search and destroy, close air support and spotter squads. The CAS is spwaned using [BIS_fnc_moduleCAS](https://community.bistudio.com/wiki/BIS_fnc_moduleCAS).   
+  
+Spotters are created when more than one entry is in the HunterHeatMap.  
+  
+Only 1 SAD, CAS or spotter is created at a time by the procedure.  
+  
+The CAS is triggered on a location set by a spotter (HunterSpotterLastSeen) or a recent HunterHeatMap location.  
+*Some refinement needed to this procedure as the HunterHeatMap is primarily used, but really this should check which is the latest marker (spotter or heatmap) and use this for attacks.*  
   
 Requires global variables
 - HunterSectors
@@ -357,7 +410,14 @@ Defines the following globals
 ### create_sad.sqf
 **Parameters:** (None)  
 **Called procedure that runs once** 
-
+  
+Creates a search and destroy vehicle and units to investigate the latest HunterHeatMap location. 2 groups are created by this procedure; 1) the vehicle and crew, 2) the units in cargo. 
+Both units work together in the script to try and locate the player.  
+*This script doesn't use the network code yet.*  
+  
+If the SAD encounters western units then they will dismount and engage, otherwise they reach the destination and search the area. The vehicle will run a wider patrol and both groups share knowledge of western units encountered.  
+*The SAD doesn't do anything when a camp or base is encountered, this is code to still work on.*  
+  
 Requires global variables
 - HunterHeatMap
 - HunterSectors
@@ -368,6 +428,12 @@ Adds the following event handlers
 ### create_spotter.sqf
 **Parameters:** (None)  
 **Called procedure that runs once** 
+  
+The spotter code creates an air vehicle that flys to all HunterHeatMap points looking for western units. Due to the poor ability of air units seeing ground, the code gives some artificial advantage to the spotter. 
+If a western unit is in the open (not amongst trees or in building) then [reveal](https://community.bistudio.com/wiki/reveal) is called and set to 1.5 (4 is max knowledge). This gives the spotter leader enough to fully spot a unit. 
+Once the spotter sees a unit then HunterSpotterLastSeen is updated.  
+  
+The spotter flys until low on fuel where it leaves and despawns. A destroyed spotter will stop the spotter procedure and exit.  
   
 Requires global variables
 - HunterHeatMap
@@ -381,6 +447,8 @@ Defines the following globals
 **Called procedure that runs once**  
   
 Sets all ecomony values into globals for money and fuel.  
+*Work in progress.*  
   
 Defines the following globals
 - HunterEconomy
+
