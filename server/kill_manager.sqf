@@ -61,7 +61,6 @@ if ( isServer ) then {
     // Grant cash reward for a kill
     private _cash = HunterEconomy select 0;
     private _reward = [_unit] call h_getRewardForType;
-    //_cash = _cash + _reward;    
 
     HunterEconomy set [0, _cash + _reward];
     publicVariable "HunterEconomy";
