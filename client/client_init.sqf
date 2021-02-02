@@ -3,6 +3,9 @@ h_assignGear = compileFinal preprocessFileLineNumbers "client\functions\h_assign
 h_removeGear = compileFinal preprocessFileLineNumbers "client\functions\h_removeGear.sqf" ;
 player_killed = compileFinal preprocessFileLineNumbers "client\player_killed.sqf" ;
 
+// Player controls
+dlgRecruit = compileFinal preprocessFileLineNumbers "client\ui\dlgRecruit.sqf" ;
+
 [] spawn compileFinal preprocessFileLineNumbers "client\interface_manager.sqf";
 
 player createDiaryRecord ["Diary", 

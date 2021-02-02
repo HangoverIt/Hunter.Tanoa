@@ -34,6 +34,7 @@ HUNTER_HEATMAP_AGE = 30 ; // minutes
 HUNTER_HEAT_THRESHOLD = 5; // number of kills to trigger CAS response
 HUNTER_CASH_REWARDS = [["Man", 10], ["Car", 1000],["Air", 10000]];
 HUNTER_ARMED_BONUS = 200;
+HUNTER_PURCHASE_SOLDIERS = [["B_Soldier_F", 100],["B_Soldier_GL_F", 250], ["B_soldier_AR_F",200]] ;
 HUNTER_SPAWN_LOCATIONS = [
                          ["NameCity",20], 
                          ["NameCityCapital", 30], 
