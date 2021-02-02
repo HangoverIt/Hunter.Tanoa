@@ -45,8 +45,21 @@ class CfgDebriefing
 };
 #include "\A3\ui_f\hpp\defineCommonGrids.inc"
 #include "\A3\ui_f\hpp\defineCommonColors.inc"
-class RscPicture ;
-class RscText ;
+#include "shared\ui\defaults.hpp"
+
+#define IDC_BUY_UNITSTATUS	1359
+#define IDC_BUY_UNITPIC	1559
+#define IDC_BUY_UNITLIST	1859
+#define IDC_BUY_UNITCREATE	1959
+#define IDC_BUY_UNITCANCEL	1960
+#define IDC_BUY_UNITDIALOG	2160
+
+#define GUI_GRID_CENTER_X	((safezoneX + (safezoneW - ((safezoneW / safezoneH) min 1.2))/2))
+#define GUI_GRID_CENTER_Y	((safezoneY + (safezoneH - (((safezoneW / safezoneH) min 1.2) / 1.2))/2))
+#define GUI_GRID_CENTER_W	((((safezoneW / safezoneH) min 1.2) / 40))
+#define GUI_GRID_CENTER_H	(((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))
+#define GUI_GRID_CENTER_WAbs	( ((safezoneW / safezoneH) min 1.2))
+#define GUI_GRID_CENTER_HAbs	((((safezoneW / safezoneH) min 1.2) / 1.2))
 
 class RscTitles
 {
@@ -152,5 +165,73 @@ class RscTitles
     };
     
     
+  };
+};
+
+class hunter_recruit {
+  idd = 9001;
+	movingEnable = false;
+	controls[] = { UnitDialog, UnitPic, UnitList, UnitCreate, UnitCancel, UnitStatus };
+	objects[] = {};
+  
+  class RecruitBase 
+  {
+  
+  };
+  
+  class UnitDialog: RscFrame
+  {
+    idc = 1801;
+    colorBackground[] = { 0, 0, 0, 0 };
+    x = 0.37625 * safezoneW + safezoneX;
+    y = 0.313 * safezoneH + safezoneY;
+    w = 0.257813 * safezoneW;
+    h = 0.374 * safezoneH;
+
+  };
+  class UnitPic: RscPicture
+  {
+    idc = 1200;
+    text = "#(argb,8,8,3)color(1,1,1,1)";
+    x = 0.382437 * safezoneW + safezoneX;
+    y = 0.335 * safezoneH + safezoneY;
+    w = 0.0928125 * safezoneW;
+    h = 0.22 * safezoneH;
+  };
+  class UnitList: RscListbox
+  {
+    idc = 1500;
+    text = "Test" ;
+    style = LB_TEXTURES ;
+    x = 0.487625 * safezoneW + safezoneX;
+    y = 0.335 * safezoneH + safezoneY;
+    w = 0.134062 * safezoneW;
+    h = 0.22 * safezoneH;
+  };
+  class UnitCreate: RscButton
+  {
+    idc = 1600;
+    text = "Create"; //--- ToDo: Localize;
+    x = 0.42575 * safezoneW + safezoneX;
+    y = 0.621 * safezoneH + safezoneY;
+    w = 0.04125 * safezoneW;
+    h = 0.044 * safezoneH;
+  };
+  class UnitCancel: RscButton
+  {
+    idc = 1601;
+    text = "Cancel"; //--- ToDo: Localize;
+    x = 0.537125 * safezoneW + safezoneX;
+    y = 0.621 * safezoneH + safezoneY;
+    w = 0.04125 * safezoneW;
+    h = 0.044 * safezoneH;
+  };
+  class UnitStatus: RscText
+  {
+    idc = 1000;
+    x = 0.42575 * safezoneW + safezoneX;
+    y = 0.577 * safezoneH + safezoneY;
+    w = 0.154687 * safezoneW;
+    h = 0.022 * safezoneH;
   };
 };
