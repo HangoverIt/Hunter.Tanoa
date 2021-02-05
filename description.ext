@@ -16,20 +16,31 @@ class Header
 {
 	gameType = CTI;
 	minPlayers = 1;
-	maxPlayers = 41;
+	maxPlayers = 8;
+};
+
+class CfgRoles
+{
+	class Hunter // Class name used in CfgRespawnInventory
+	{
+		displayName = "Hunter"; // Name of the role, displayed in the respawn menu
+		icon = "a3\missions_f_exp\data\img\classes\assault_ca.paa"; // Icon shown next to the role name in the respawn screen
+	};
 };
 
 class CfgRespawnInventory 
 {
-  class None
+  class Hunter
   {
-    displayName = "Default";
-	weapons[] = {} ;
-	magazines[] = {} ;
-	items[] = {} ;
-	linkedItems[] = {};
-	uniformClass = "U_B_CombatUniform_mcam_tshirt";
-	backpack = "" ;
+    displayName = "Hunter";
+    role = "Hunter";
+    show = "true" ;
+    weapons[] = {} ;
+    magazines[] = {} ;
+    items[] = {} ;
+    linkedItems[] = {};
+    uniformClass = "U_B_CombatUniform_mcam_tshirt";
+    backpack = "" ;
   };
 };
 
@@ -60,6 +71,7 @@ class CfgDebriefing
 #define GUI_GRID_CENTER_H	(((((safezoneW / safezoneH) min 1.2) / 1.2) / 25))
 #define GUI_GRID_CENTER_WAbs	( ((safezoneW / safezoneH) min 1.2))
 #define GUI_GRID_CENTER_HAbs	((((safezoneW / safezoneH) min 1.2) / 1.2))
+
 
 class RscTitles
 {
@@ -173,11 +185,6 @@ class hunter_recruit {
 	movingEnable = false;
 	controls[] = { UnitDialog, UnitPic, UnitList, UnitCreate, UnitCancel, UnitStatus };
 	objects[] = {};
-  
-  class RecruitBase 
-  {
-  
-  };
   
   class UnitDialog: RscFrame
   {

@@ -11,6 +11,7 @@ private _create_click = {
 
 private _cancel_click = {
   params["_ctl"] ;
+  HunterDlgReturn = "" ;
   HunterDlgExit = true ;
 };
 

@@ -9,6 +9,8 @@ if (isNil "HunterPlayers") then {
 
 publicVariable "HunterPlayers";
 
+[west, "Hunter"] call BIS_fnc_addRespawnInventory ;
+
 // Define a group for none owned soldiers
 HunterBlueForGrp = createGroup [west, false] ;
 
