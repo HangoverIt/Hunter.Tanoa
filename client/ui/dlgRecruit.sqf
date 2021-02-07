@@ -1,5 +1,6 @@
 params["_buylist"] ;
-HunterDlgReturn = "" ;
+private _nullReturn = [] ;
+HunterDlgReturn = _nullReturn ;
 HunterDlgExit = false ;
 
 private _create_click = {
@@ -10,17 +11,17 @@ private _create_click = {
 
 private _cancel_click = {
   params["_ctl"] ;
-  HunterDlgReturn = "" ;
+  HunterDlgReturn = _nullReturn ;
   HunterDlgExit = true ;
 };
 
 private _list_changed = {
   params ["_control", "_selectedIndex"];
   if (_selectedIndex >= 0) then {
-    HunterDlgReturn = _control lbData _selectedIndex ;
+    HunterDlgReturn = [_control lbData _selectedIndex, _control lbValue _selectedIndex] ;
     _parent = ctrlParent _control ;
     _ctlPic = _parent displayCtrl 1200 ;
-    _ctlPic ctrlSetText getText (configFile >> "CfgVehicles" >> HunterDlgReturn >> "editorPreview") ;
+    _ctlPic ctrlSetText getText (configFile >> "CfgVehicles" >> (_control lbData _selectedIndex) >> "editorPreview") ;
     
     _cost = _control lbValue _selectedIndex;
     _textout = format["Unit cost %1", _cost] ;
@@ -36,7 +37,7 @@ private _list_changed = {
     _ctlText = _parent displayCtrl 1000 ;
     _ctlText ctrlSetText _textout ;
   }else{
-    HunterDlgReturn = "" ;
+    HunterDlgReturn = _nullReturn ;
     _ctlPic ctrlSetText "" ;
   };
 };
@@ -64,7 +65,7 @@ if (createDialog "hunter_recruit") then {
     }forEach _buylist;
     
     _ctlList lbSetCurSel 0; // set first item as default
-    HunterDlgReturn = _ctlList lbData 0 ;
+    HunterDlgReturn = [_ctlList lbData 0, _ctlList lbValue 0] ;
     
     waitUntil { HunterDlgExit || !dialog };
     closeDialog 0;
