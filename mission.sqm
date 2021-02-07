@@ -16,7 +16,7 @@ class EditorData
 	};
 	class LayerIndexProvider
 	{
-		nextID=40;
+		nextID=41;
 	};
 	class Camera
 	{
@@ -7140,7 +7140,7 @@ class Mission
 			};
 			id=546;
 			type="O_Boat_Armed_01_hmg_F";
-			atlOffset=6.6822014;
+			atlOffset=6.7948103;
 		};
 		class Item355
 		{
