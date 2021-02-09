@@ -56,7 +56,7 @@ while {true} do {
     _saveplayers pushBack _saveplayer;
   }forEach HunterPlayers ;
   
-  private _savegame = [_camplist, _bases, _saveobjs, _saveplayers, HunterSectors, HunterLocations, date, HunterHeatMap] ;
+  private _savegame = [_camplist, _bases, _saveobjs, _saveplayers, HunterSectors, HunterLocations, date, HunterHeatMap, HunterEconomy] ;
   profileNamespace setVariable [HUNTER_SAVE_VAR, _savegame] ;
   saveProfileNamespace ;
   

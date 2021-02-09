@@ -11,6 +11,7 @@ if (!isNil "_savedgame") then {
   HunterLocations = _savedgame select 5 ;
   _date = _savedgame select 6 ;
   HunterHeatMap = _savedgame select 7 ;
+  HunterEconomy = _savedgame select 8 ;
   HunterBases = [] ;
   HunterPlayers = [] ;
   
@@ -47,6 +48,6 @@ if (!isNil "_savedgame") then {
     HunterPlayers pushBack [_x] ;
   }forEach _hunters ;
   publicVariable "HunterPlayers";
-  
+  publicVariable "HunterEconomy";
 };
 diag_log "Finished load" ;
