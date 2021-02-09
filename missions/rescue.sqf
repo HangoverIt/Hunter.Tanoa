@@ -34,7 +34,8 @@ private _fn_free_man = {
   removeAllActions _target ;
   [(group _target)] spawn cleanup_manager;
 };
-_captive addAction ["Set free", _fn_free_man, nil, 1.5, true, true, "", "true", 10, false, "", ""] ;
+
+[_captive,["Set free", _fn_free_man, nil, 1.5, true, true, "", "true", 10, false, "", ""]] remoteExec ["addAction"]; ;
 
 if (_icon == "") then {_icon = "help";};
 private _huntermission = [_id, _title, _expiry, _missionpos, _description, _icon] call start_mission;
