@@ -78,8 +78,8 @@ while {true} do {
       _x set [10, _now + (HUNTER_LOCATION_MAX_THREAT_COOLDOWN *_min)] ;
     };
     
-    if (_now >= _l_next_reinforce_time && _l_percent < 100 && isNull (_thislocationtmp select 0)) then {
-      // Reinforcement timeout expired, the location is below 100% strength and there's not current reinforcement spawned
+    if (_now >= _l_next_reinforce_time && _l_percent < HUNTER_REINFORCE_BELOW_PERCENT && isNull (_thislocationtmp select 0)) then {
+      // Reinforcement timeout expired, the location is below threshold strength and there's not current reinforcement spawned
       diag_log format ["%1: Location %2 to be reinforced. Currently at %3 percent", time, _l_name, _l_percent] ;
       // Set next reinforcement timeout
       _x set [10, _now + (HUNTER_LOCATION_STD_THREAT_COOLDOWN *_min)] ;

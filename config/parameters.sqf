@@ -26,6 +26,7 @@ HUNTER_CUSTOM_LOCATION_SPACING_FACTOR = 5 ; // This impacts the creation of cust
 HUNTER_CUSTOM_LOCATION = "custom" ;
 HUNTER_LOCATION_MAX_THREAT_COOLDOWN = 180 ; // in minutes - cooldown time if max threat reached
 HUNTER_LOCATION_STD_THREAT_COOLDOWN = 1 ; // in minutes - time to resupply
+HUNTER_REINFORCE_BELOW_PERCENT = 60 ;
 HUNTER_THREAT_DECREASE_TIME = 60 ;
 HUNTER_SHOW_LOCATION_AREA = true ;
 HUNTER_SAD_TIMEOUT = 15 ; // minutes
