@@ -34,7 +34,7 @@ private _last_hm = HunterHeatMap select 0 ; // Last heat map update
 }forEach HunterHeatMap ;
 
 private _primary_destination = _last_hm select 2 ;
-private _overWater = !(_primary_destination isFlatEmpty  [-1, -1, -1, -1, 2, false] isEqualTo []);
+private _overWater = !([_primary_destination] call h_posOnLand);
 private _all_units = [] ;
 private _trypos = [0,0,0] ;
 private _vehicleclass = "";
